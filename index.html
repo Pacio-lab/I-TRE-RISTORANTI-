@@ -4,16 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#101018">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Cena a Sorpresa</title>
+
 <style>
 :root{
   --glass-bg:rgba(255,255,255,.09);
+  --glass-bg-strong:rgba(255,255,255,.13);
   --glass-border:rgba(255,255,255,.18);
   --text:#f5f5f7;
   --muted:#98989d;
+  --accent:#e52e71;
+  --accent2:#03a9f4;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{background:#101018}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  background:#101018;
+}
+
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   color:var(--text);
@@ -23,277 +38,1452 @@ body{
   overflow-x:hidden;
   -webkit-tap-highlight-color:transparent;
 }
-/* Sfondo animato: un solo layer che si muove con transform (GPU), niente repaint */
+
+/* =========================
+   SFONDO
+========================= */
+
 .bg{
-  position:fixed;inset:0;z-index:-1;overflow:hidden;
-  background:linear-gradient(135deg,#101018,#1a1a24 50%,#141727);
-}
-.bg::before{
-  content:"";position:absolute;width:140%;height:140%;top:-20%;left:-20%;
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  overflow:hidden;
   background:
-    radial-gradient(circle at 20% 30%,rgba(156,39,176,.28),transparent 45%),
-    radial-gradient(circle at 80% 70%,rgba(3,169,244,.22),transparent 45%);
+    linear-gradient(135deg,#101018,#1a1a24 50%,#141727);
+}
+
+.bg::before{
+  content:"";
+  position:absolute;
+  width:140%;
+  height:140%;
+  top:-20%;
+  left:-20%;
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(156,39,176,.28),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(3,169,244,.22),
+      transparent 45%
+    );
   animation:drift 18s ease-in-out infinite alternate;
   will-change:transform;
 }
-@keyframes drift{
-  from{transform:translate3d(-4%,-3%,0) scale(1)}
-  to{transform:translate3d(4%,3%,0) scale(1.08)}
-}
-main{max-width:800px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
-h1{font-weight:300;text-align:center;letter-spacing:.5px;font-size:clamp(1.5rem,5vw,2rem);margin-bottom:2rem}
 
-/* Orb: gradiente + glow statico, anima solo transform/opacity */
+@keyframes drift{
+  from{
+    transform:translate3d(-4%,-3%,0) scale(1);
+  }
+  to{
+    transform:translate3d(4%,3%,0) scale(1.08);
+  }
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+main{
+  max-width:800px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+#choose{
+  width:100%;
+}
+
+h1{
+  font-weight:300;
+  text-align:center;
+  letter-spacing:.5px;
+  font-size:clamp(1.5rem,5vw,2rem);
+  margin-bottom:2rem;
+}
+
+/* =========================
+   ORB
+========================= */
+
 .orb{
-  width:70px;height:70px;border-radius:50%;margin:0 auto 1.5rem;
-  background:radial-gradient(circle at 30% 30%,#ff8a00,#e52e71 45%,#9c27b0 70%,#03a9f4);
-  box-shadow:0 0 28px rgba(229,46,113,.45);
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  margin:0 auto 1.5rem;
+
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      #ff8a00,
+      #e52e71 45%,
+      #9c27b0 70%,
+      #03a9f4
+    );
+
+  box-shadow:
+    0 0 28px rgba(229,46,113,.45),
+    0 0 70px rgba(3,169,244,.12);
+
   animation:breathe 3s ease-in-out infinite alternate;
   will-change:transform,opacity;
 }
-@keyframes breathe{from{transform:scale(.9);opacity:.75}to{transform:scale(1.12);opacity:1}}
 
-.cards{width:100%;display:flex;flex-direction:column;gap:1.25rem}
+@keyframes breathe{
+  from{
+    transform:scale(.9);
+    opacity:.75;
+  }
+  to{
+    transform:scale(1.12);
+    opacity:1;
+  }
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:1.25rem;
+}
+
 .card{
-  display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
+  display:block;
+  width:100%;
+  text-align:left;
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+
   background:var(--glass-bg);
   border:1px solid var(--glass-border);
-  border-radius:24px;padding:1.75rem;
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
-  transition:transform .25s ease,background-color .25s ease;
+  border-radius:24px;
+  padding:1.75rem;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.2);
+
+  transition:
+    transform .25s ease,
+    background-color .25s ease,
+    border-color .25s ease;
 }
-@media (hover:hover){.card:hover{transform:translateY(-3px);background:rgba(255,255,255,.14)}}
-.card:active{transform:scale(.985)}
-.card:focus-visible{outline:2px solid #03a9f4;outline-offset:3px}
-.card[disabled]{pointer-events:none;opacity:.6}
+
+@media (hover:hover){
+  .card:hover{
+    transform:translateY(-3px);
+    background:rgba(255,255,255,.14);
+    border-color:rgba(255,255,255,.28);
+  }
+}
+
+.card:active{
+  transform:scale(.985);
+}
+
+.card:focus-visible{
+  outline:2px solid var(--accent2);
+  outline-offset:3px;
+}
+
+.card[disabled]{
+  pointer-events:none;
+  opacity:.6;
+}
 
 .card h2{
-  font-size:1.3rem;font-weight:400;letter-spacing:1px;
-  margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--glass-border);
+  font-size:1.3rem;
+  font-weight:400;
+  letter-spacing:1px;
+  margin-bottom:1rem;
+  padding-bottom:.8rem;
+  border-bottom:1px solid var(--glass-border);
 }
-.card ul{list-style:none;line-height:1.7;font-weight:300;color:#d1d1d6}
-.card li+li{margin-top:.35rem}
-.card p{margin-top:1rem;font-style:italic;font-size:.9em;color:var(--muted)}
 
-#success{display:none;text-align:center;margin-top:22vh}
-#success h2{font-size:1.6rem;font-weight:300}
-#success p{margin-top:.9rem;color:var(--muted);font-weight:300}
-body.done #choose{display:none}
-body.done #success{display:block;animation:fade .8s ease both}
-@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.card ul{
+  list-style:none;
+  line-height:1.7;
+  font-weight:300;
+  color:#d1d1d6;
+}
 
-/* Area riservata (solo per te) */
-#trigger{position:fixed;right:0;bottom:0;width:72px;height:72px;z-index:50;background:transparent}
+.card li+li{
+  margin-top:.35rem;
+}
+
+.card p{
+  margin-top:1rem;
+  font-style:italic;
+  font-size:.9em;
+  color:var(--muted);
+}
+
+/* =========================
+   SUCCESS
+========================= */
+
+#success{
+  display:none;
+  text-align:center;
+  margin-top:22vh;
+}
+
+#success h2{
+  font-size:1.6rem;
+  font-weight:300;
+}
+
+#success p{
+  margin-top:.9rem;
+  color:var(--muted);
+  font-weight:300;
+}
+
+body.done #choose{
+  display:none;
+}
+
+body.done #success{
+  display:block;
+  animation:fade .8s ease both;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(16px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* =========================
+   TRIGGER SEGRETO
+========================= */
+
+#trigger{
+  position:fixed;
+  right:0;
+  bottom:0;
+  width:72px;
+  height:72px;
+  z-index:50;
+  background:transparent;
+}
+
+/* =========================
+   ADMIN OVERLAY
+========================= */
+
 #admin{
-  position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.88);padding:1.25rem;
+  position:fixed;
+  inset:0;
+  z-index:100;
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(35,35,55,.72),
+      rgba(0,0,0,.94)
+    );
+
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  padding:1.25rem;
 }
-#admin.open{display:flex}
+
+#admin.open{
+  display:flex;
+  animation:adminIn .3s ease both;
+}
+
+@keyframes adminIn{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
 .panel{
-  width:100%;max-width:400px;text-align:center;padding:2rem;border-radius:20px;
-  background:#1b1b24;border:1px solid var(--glass-border);
+  width:100%;
+  max-width:430px;
+  text-align:center;
+
+  padding:2rem;
+
+  border-radius:28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(40,40,52,.96),
+      rgba(23,23,32,.97)
+    );
+
+  border:1px solid var(--glass-border);
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55);
+
+  animation:panelIn .35s ease both;
 }
-.panel h3{font-weight:400}
-.panel .hint{font-size:.85rem;color:var(--muted);margin-top:.4rem}
+
+@keyframes panelIn{
+  from{
+    transform:translateY(20px) scale(.97);
+    opacity:0;
+  }
+  to{
+    transform:none;
+    opacity:1;
+  }
+}
+
+.panel h3{
+  font-size:1.35rem;
+  font-weight:400;
+  letter-spacing:.4px;
+}
+
+.panel .hint{
+  font-size:.85rem;
+  color:var(--muted);
+  margin-top:.5rem;
+}
+
 .panel input{
-  width:100%;margin-top:1rem;padding:12px;border-radius:12px;font-size:1rem;text-align:center;
-  border:1px solid var(--glass-border);background:rgba(255,255,255,.08);color:#fff;outline:none;
+  width:100%;
+  margin-top:1.25rem;
+  padding:14px;
+
+  border-radius:14px;
+  font-size:1rem;
+  text-align:center;
+
+  border:1px solid var(--glass-border);
+  background:rgba(255,255,255,.08);
+  color:#fff;
+
+  outline:none;
+
+  transition:
+    border-color .2s ease,
+    background .2s ease;
 }
+
+.panel input:focus{
+  border-color:rgba(3,169,244,.65);
+  background:rgba(255,255,255,.11);
+}
+
 .panel button{
-  width:100%;margin-top:.8rem;padding:12px;border-radius:12px;border:0;font-size:1rem;cursor:pointer;
-  background:#fff;color:#000;font-weight:500;
+  width:100%;
+  margin-top:.8rem;
+  padding:14px;
+
+  border-radius:14px;
+  border:0;
+
+  font-size:1rem;
+  cursor:pointer;
+
+  background:#fff;
+  color:#000;
+  font-weight:600;
+
+  transition:
+    transform .2s ease,
+    opacity .2s ease;
 }
-.panel button.ghost{background:transparent;color:#fff;border:1px solid var(--glass-border)}
-#result{margin-top:1.25rem;line-height:1.6;font-weight:300;font-size:1.05rem;min-height:1.5em}
-#result b{font-weight:600}
-#result a{color:#03a9f4}
-#result .err{color:#ff6b6b}
+
+.panel button:active{
+  transform:scale(.98);
+}
+
+.panel button.ghost{
+  background:transparent;
+  color:#fff;
+  border:1px solid var(--glass-border);
+}
+
+/* =========================
+   RISULTATO
+========================= */
+
+#result{
+  margin-top:1.4rem;
+  line-height:1.6;
+  font-weight:300;
+  font-size:1.05rem;
+  min-height:1.5em;
+}
+
+#result b{
+  font-weight:600;
+}
+
+#result a{
+  text-decoration:none;
+}
+
+#result .err{
+  color:#ff6b6b;
+}
+
+/* =========================
+   RISULTATO RISTORANTE
+========================= */
+
+.choice-result{
+  margin-top:1rem;
+  padding:1.25rem;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.09),
+      rgba(255,255,255,.045)
+    );
+
+  border:1px solid rgba(255,255,255,.13);
+
+  text-align:center;
+}
+
+.choice-label{
+  font-size:.76rem;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  color:var(--muted);
+  margin-bottom:.45rem;
+}
+
+.choice-name{
+  font-size:1.35rem;
+  font-weight:500;
+  line-height:1.25;
+}
+
+.choice-time{
+  margin-top:.45rem;
+  font-size:.78rem;
+  color:var(--muted);
+}
+
+.action-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.65rem;
+  margin-top:1rem;
+}
+
+.action-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+
+  min-height:48px;
+
+  border-radius:14px;
+
+  text-decoration:none;
+
+  font-size:.9rem;
+  font-weight:600;
+
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.action-btn:active{
+  transform:scale(.97);
+}
+
+.btn-book{
+  background:
+    linear-gradient(
+      135deg,
+      #e52e71,
+      #9c27b0
+    );
+
+  color:white;
+
+  box-shadow:
+    0 8px 25px rgba(229,46,113,.25);
+}
+
+.btn-map{
+  background:rgba(255,255,255,.09);
+  color:white;
+  border:1px solid var(--glass-border);
+}
+
+.copy-btn{
+  width:100%;
+  margin-top:.65rem;
+
+  padding:10px;
+
+  border-radius:12px;
+
+  background:transparent;
+  color:var(--muted);
+
+  border:1px solid rgba(255,255,255,.10);
+
+  font-size:.8rem;
+  cursor:pointer;
+}
+
+/* =========================
+   ERROR / LOADING
+========================= */
+
+.loading{
+  color:var(--muted);
+}
+
+.error-box{
+  padding:1rem;
+  border-radius:15px;
+  background:rgba(255,107,107,.08);
+  border:1px solid rgba(255,107,107,.15);
+}
+
+/* =========================
+   ACCESSIBILITY
+========================= */
 
 @media (prefers-reduced-motion:reduce){
-  .bg::before,.orb{animation:none}
-  .card{transition:none}
+
+  .bg::before,
+  .orb{
+    animation:none;
+  }
+
+  .card,
+  .panel,
+  #admin{
+    transition:none;
+    animation:none;
+  }
+}
+
+@media(max-width:430px){
+
+  body{
+    padding:1.5rem 1rem;
+  }
+
+  .card{
+    padding:1.4rem;
+    border-radius:21px;
+  }
+
+  .panel{
+    padding:1.5rem;
+  }
+
+  .action-buttons{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
+
 <body>
+
 <div class="bg" aria-hidden="true"></div>
 
 <main>
+
+  <!-- =========================
+       SCELTA
+  ========================== -->
+
   <section id="choose">
+
     <div class="orb" aria-hidden="true"></div>
+
     <h1>Quale menù ti ispira di più?</h1>
 
     <div class="cards">
+
       <button class="card" type="button" data-choice="1">
+
         <h2>Proposta 1</h2>
+
         <ul>
           <li>Antipasto: Salumi tipici selezionati con giardiniera artigianale</li>
           <li>Primo: Casoncelli tradizionali burro versato e salvia</li>
           <li>Secondo: Manzo all'olio con polenta morbida macinata a pietra</li>
           <li>Dolce: Torta tipica bresciana della casa</li>
         </ul>
-        <p>Atmosfera tipica, sapori di una volta.</p>
+
+        <p>
+          Atmosfera tipica, sapori di una volta.
+        </p>
+
       </button>
 
+
       <button class="card" type="button" data-choice="2">
+
         <h2>Proposta 2</h2>
+
         <ul>
           <li>Antipasto: Crudo di mare e selezione di tartare del giorno</li>
           <li>Primo: Risotto d'autore al profumo di lago</li>
           <li>Secondo: Trancio di pescato su vellutata di stagione</li>
           <li>Dolce: Selezione di alta pasticceria contemporanea</li>
         </ul>
-        <p>Eleganza, design e materie prime di altissima qualità.</p>
+
+        <p>
+          Eleganza, design e materie prime di altissima qualità.
+        </p>
+
       </button>
 
+
       <button class="card" type="button" data-choice="3">
+
         <h2>Proposta 3</h2>
+
         <ul>
           <li>Antipasto: Tagliere di formaggi stagionati e sfiziosità dell'oste</li>
           <li>Primo: Bigoli freschi con zucca e croccante di pancetta</li>
           <li>Secondo: Filetto di manzo al pepe verde</li>
           <li>Dolce: Tiramisù tradizionale</li>
         </ul>
-        <p>Atmosfera intima in centro storico, accoglienza calorosa.</p>
+
+        <p>
+          Atmosfera intima in centro storico, accoglienza calorosa.
+        </p>
+
       </button>
+
     </div>
+
   </section>
+
+
+  <!-- =========================
+       CONFERMA PUBBLICA
+  ========================== -->
 
   <section id="success" role="status" aria-live="polite">
+
     <div class="orb" aria-hidden="true"></div>
+
     <h2>Ottima scelta!</h2>
-    <p>La tua scelta è stata registrata. Non vedo l'ora. ❤️</p>
+
+    <p>
+      La tua scelta è stata registrata.<br>
+      Non vedo l'ora. ❤️
+    </p>
+
   </section>
+
 </main>
 
+
+<!--
+  ANGOLO SEGRETO:
+  doppio tap nell'angolo in basso a destra
+-->
 <div id="trigger" aria-hidden="true"></div>
 
-<div id="admin" role="dialog" aria-modal="true" aria-label="Area riservata">
+
+<!-- =========================
+     AREA RISERVATA
+========================== -->
+
+<div
+  id="admin"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Area riservata"
+>
+
   <div class="panel">
-    <h3>Area riservata</h3>
-    <p class="hint">Inserisci la password per vedere la scelta</p>
-    <input id="pwd" type="password" placeholder="Password" autocomplete="off">
-    <button id="reveal" type="button">Rivela scelta</button>
+
+    <h3>🔐 Area riservata</h3>
+
+    <p class="hint">
+      Questa sezione è visibile solo a te.
+    </p>
+
+
+    <input
+      id="pwd"
+      type="password"
+      placeholder="Inserisci la password"
+      autocomplete="off"
+      inputmode="text"
+    >
+
+
+    <button id="reveal" type="button">
+      Rivela la scelta
+    </button>
+
+
     <div id="result"></div>
-    <button id="close" class="ghost" type="button">Chiudi</button>
+
+
+    <button
+      id="close"
+      class="ghost"
+      type="button"
+    >
+      Chiudi
+    </button>
+
   </div>
+
 </div>
+
 
 <script>
 (() => {
+
   'use strict';
 
-  // ====== CONFIGURAZIONE (da modificare) ======
-  // 1) Scegli un nome LUNGO e imprevedibile: chiunque lo conosca può leggere i messaggi.
-  // 2) Sul tuo telefono installa l'app "ntfy" (iOS/Android) e iscriviti allo stesso nome,
-  //    oppure apri https://ntfy.sh/IL_TUO_NOME nel browser.
-  const NTFY_TOPIC = 'cena-sorpresa-CAMBIA-QUESTO-7k3xq9';
+
+  /* =====================================================
+     CONFIGURAZIONE
+  ===================================================== */
+
+  /*
+    IMPORTANTE:
+    Cambia questo topic con un nome lungo e casuale.
+
+    Esempio:
+    cena-sorpresa-mikko-8x92kLm4Pq7
+  */
+
+  const NTFY_TOPIC =
+    'cena-sorpresa-CAMBIA-QUESTO-7k3xq9';
+
+
+  /*
+    PASSWORD AREA RISERVATA
+  */
+
+  const ADMIN_PWD = 'amore';
+
+
+  /*
+    RISTORANTI
+  */
 
   const RISTORANTI = {
+
     1: 'I Dù dela Contrada',
+
     2: 'Massari Gardone Riviera',
+
     3: 'Osteria Oste Sobrio'
+
   };
 
-  const KEY_DONE = 'cena_scelta_inviata';
-  const KEY_PENDING = 'cena_scelta_da_inviare';
-  const body = document.body;
+
+  /* =====================================================
+     STORAGE
+  ===================================================== */
+
+  const KEY_DONE =
+    'cena_scelta_inviata';
+
+  const KEY_PENDING =
+    'cena_scelta_da_inviare';
+
+
+  const body =
+    document.body;
+
 
   const store = {
-    get: k => { try { return localStorage.getItem(k); } catch { return null; } },
-    set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
-    del: k => { try { localStorage.removeItem(k); } catch {} }
+
+    get(k){
+      try{
+        return localStorage.getItem(k);
+      }catch{
+        return null;
+      }
+    },
+
+    set(k,v){
+      try{
+        localStorage.setItem(k,v);
+      }catch{}
+    },
+
+    del(k){
+      try{
+        localStorage.removeItem(k);
+      }catch{}
+    }
+
   };
 
-  async function invia(scelta) {
-    const res = await fetch('https://ntfy.sh/' + encodeURIComponent(NTFY_TOPIC), {
-      method: 'POST',
-      headers: { 'Title': 'Ha scelto la cena!', 'Priority': '4', 'Tags': 'heart' },
-      body: `Proposta ${scelta}: ${RISTORANTI[scelta]}`,
-      keepalive: true
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-  }
 
-  async function tentaInvio(scelta) {
-    try {
-      await invia(scelta);
-      store.del(KEY_PENDING);
-      store.set(KEY_DONE, String(scelta));
-    } catch {
-      // Niente rete: riprova al prossimo caricamento della pagina
-      store.set(KEY_PENDING, String(scelta));
+  /* =====================================================
+     INVIO SCELTA
+  ===================================================== */
+
+  async function invia(scelta){
+
+    const res = await fetch(
+      'https://ntfy.sh/' +
+      encodeURIComponent(NTFY_TOPIC),
+      {
+        method:'POST',
+
+        headers:{
+          'Title':'Ha scelto la cena!',
+          'Priority':'4',
+          'Tags':'heart'
+        },
+
+        body:
+          `Proposta ${scelta}: ${RISTORANTI[scelta]}`,
+
+        keepalive:true
+      }
+    );
+
+
+    if(!res.ok){
+
+      throw new Error(
+        'HTTP ' + res.status
+      );
+
     }
+
   }
 
-  // Un solo listener per tutte le schede
-  document.getElementById('choose').addEventListener('click', e => {
-    const card = e.target.closest('.card');
-    if (!card) return;
-    const scelta = Number(card.dataset.choice);
-    document.querySelectorAll('.card').forEach(c => c.disabled = true);
-    body.classList.add('done');          // feedback immediato, senza aspettare la rete
-    tentaInvio(scelta);
-  }, { once: true });
 
-  // Se aveva già scelto, mostra direttamente il messaggio finale
-  if (store.get(KEY_DONE)) body.classList.add('done');
+  async function tentaInvio(scelta){
 
-  // Se l'invio precedente era fallito, riprova
-  const pending = store.get(KEY_PENDING);
-  if (pending) { body.classList.add('done'); tentaInvio(Number(pending)); }
+    try{
 
-  // ====== AREA RISERVATA (solo per te) ======
-  // Tocca due volte l'angolo in basso a destra. La password serve solo a evitare
-  // sbirciatine accidentali: non è una vera protezione.
-  const ADMIN_PWD = 'amore';
-  const admin = document.getElementById('admin');
-  const pwd = document.getElementById('pwd');
-  const out = document.getElementById('result');
-  const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+      await invia(scelta);
+
+      store.del(KEY_PENDING);
+
+      store.set(
+        KEY_DONE,
+        String(scelta)
+      );
+
+    }catch{
+
+      /*
+        Se manca la connessione,
+        riprova al prossimo caricamento.
+      */
+
+      store.set(
+        KEY_PENDING,
+        String(scelta)
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SCELTA MENU
+  ===================================================== */
+
+  document
+    .getElementById('choose')
+    .addEventListener(
+      'click',
+      e => {
+
+        const card =
+          e.target.closest('.card');
+
+        if(!card) return;
+
+
+        const scelta =
+          Number(card.dataset.choice);
+
+
+        /*
+          Disabilita tutte le proposte.
+        */
+
+        document
+          .querySelectorAll('.card')
+          .forEach(
+            c => c.disabled = true
+          );
+
+
+        /*
+          Mostra immediatamente
+          la schermata di conferma.
+        */
+
+        body.classList.add('done');
+
+
+        /*
+          Invia la scelta.
+        */
+
+        tentaInvio(scelta);
+
+      },
+      {once:true}
+    );
+
+
+  /* =====================================================
+     SE AVEVA GIÀ SCELTO
+  ===================================================== */
+
+  if(store.get(KEY_DONE)){
+
+    body.classList.add('done');
+
+  }
+
+
+  /* =====================================================
+     RETRY
+  ===================================================== */
+
+  const pending =
+    store.get(KEY_PENDING);
+
+
+  if(pending){
+
+    body.classList.add('done');
+
+    tentaInvio(
+      Number(pending)
+    );
+
+  }
+
+
+  /* =====================================================
+     AREA RISERVATA
+  ===================================================== */
+
+  const admin =
+    document.getElementById('admin');
+
+  const pwd =
+    document.getElementById('pwd');
+
+  const out =
+    document.getElementById('result');
+
+
+  /*
+    Escape HTML
+  */
+
+  const esc = s =>
+    String(s).replace(
+      /[&<>"]/g,
+      c => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;'
+      }[c])
+    );
+
+
+  /*
+    Doppio tap nell'angolo
+    in basso a destra.
+  */
 
   let lastTap = 0;
-  document.getElementById('trigger').addEventListener('click', () => {
-    const now = Date.now();
-    if (now - lastTap < 450) { admin.classList.add('open'); pwd.focus(); }
-    lastTap = now;
-  });
 
-  function chiudi() { admin.classList.remove('open'); pwd.value = ''; out.textContent = ''; }
-  document.getElementById('close').addEventListener('click', chiudi);
 
-  async function rivela() {
-    if (pwd.value.trim().toLowerCase() !== ADMIN_PWD) {
-      out.innerHTML = '<span class="err">Password errata</span>';
-      return;
-    }
-    out.textContent = 'Controllo…';
-    try {
-      // Storico messaggi del topic (ntfy.sh li conserva circa 12 ore)
-      const res = await fetch('https://ntfy.sh/' + encodeURIComponent(NTFY_TOPIC) + '/json?poll=1&since=all');
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const righe = (await res.text()).trim().split('\n').filter(Boolean);
-      const msgs = righe.map(r => { try { return JSON.parse(r); } catch { return null; } })
-                        .filter(m => m && m.event === 'message');
-      if (!msgs.length) {
-        out.innerHTML = '<span class="err">Nessuna scelta ricevuta (o più vecchia di 12 ore)</span>';
-        return;
+  document
+    .getElementById('trigger')
+    .addEventListener(
+      'click',
+      () => {
+
+        const now =
+          Date.now();
+
+
+        if(now - lastTap < 450){
+
+          admin.classList.add('open');
+
+          pwd.focus();
+
+        }
+
+
+        lastTap = now;
+
       }
-      const m = msgs[msgs.length - 1];
-      const n = (m.message.match(/Proposta (\d)/) || [])[1];
-      const nome = RISTORANTI[n] || m.message;
-      const quando = new Date(m.time * 1000).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
-      const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(nome);
-      out.innerHTML = `Ha scelto la <b>Proposta ${esc(n || '?')}</b><br>` +
-        `<b>${esc(nome)}</b><br><small>${esc(quando)}</small><br>` +
-        `<a href="${maps}" target="_blank" rel="noopener">Apri su Maps</a>`;
-    } catch {
-      out.innerHTML = '<span class="err">Impossibile leggere la scelta. Riprova con la connessione attiva.</span>';
-    }
+    );
+
+
+  /* =====================================================
+     CHIUDI ADMIN
+  ===================================================== */
+
+  function chiudi(){
+
+    admin.classList.remove('open');
+
+    pwd.value = '';
+
+    out.textContent = '';
+
   }
-  document.getElementById('reveal').addEventListener('click', rivela);
-  pwd.addEventListener('keydown', e => { if (e.key === 'Enter') rivela(); });
+
+
+  document
+    .getElementById('close')
+    .addEventListener(
+      'click',
+      chiudi
+    );
+
+
+  /*
+    Chiudi cliccando fuori dal pannello
+  */
+
+  admin.addEventListener(
+    'click',
+    e => {
+
+      if(e.target === admin){
+
+        chiudi();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     PRENOTAZIONE
+  ===================================================== */
+
+  function creaLinkPrenotazione(nome){
+
+    /*
+      Google Search permette di trovare
+      rapidamente il ristorante e,
+      quando disponibile, il sistema
+      di prenotazione.
+    */
+
+    return (
+      'https://www.google.com/search?q=' +
+      encodeURIComponent(
+        nome + ' prenotazione'
+      )
+    );
+
+  }
+
+
+  function creaLinkMaps(nome){
+
+    return (
+      'https://www.google.com/maps/search/?api=1&query=' +
+      encodeURIComponent(nome)
+    );
+
+  }
+
+
+  /* =====================================================
+     RIVELA SCELTA
+  ===================================================== */
+
+  async function rivela(){
+
+    /*
+      Controllo password
+    */
+
+    if(
+      pwd.value
+        .trim()
+        .toLowerCase() !== ADMIN_PWD
+    ){
+
+      out.innerHTML = `
+        <div class="error-box">
+          <span class="err">
+            Password errata
+          </span>
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    /*
+      Loading
+    */
+
+    out.innerHTML = `
+      <div class="loading">
+        Sto cercando la scelta…
+      </div>
+    `;
+
+
+    try{
+
+      /*
+        Recupera lo storico ntfy.
+      */
+
+      const res =
+        await fetch(
+          'https://ntfy.sh/' +
+          encodeURIComponent(NTFY_TOPIC) +
+          '/json?poll=1&since=all'
+        );
+
+
+      if(!res.ok){
+
+        throw new Error(
+          'HTTP ' + res.status
+        );
+
+      }
+
+
+      const text =
+        await res.text();
+
+
+      const righe =
+        text
+          .trim()
+          .split('\n')
+          .filter(Boolean);
+
+
+      const msgs =
+        righe
+          .map(r => {
+
+            try{
+
+              return JSON.parse(r);
+
+            }catch{
+
+              return null;
+
+            }
+
+          })
+          .filter(
+            m =>
+              m &&
+              m.event === 'message'
+          );
+
+
+      /*
+        Nessun messaggio
+      */
+
+      if(!msgs.length){
+
+        out.innerHTML = `
+          <div class="error-box">
+
+            <span class="err">
+              Nessuna scelta ricevuta.
+            </span>
+
+            <br>
+
+            <small>
+              Il messaggio potrebbe essere
+              più vecchio della cronologia disponibile
+              oppure il topic non è configurato.
+            </small>
+
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      /*
+        Ultima scelta
+      */
+
+      const m =
+        msgs[msgs.length - 1];
+
+
+      /*
+        Estrae Proposta 1 / 2 / 3
+      */
+
+      const match =
+        m.message.match(
+          /Proposta\s+(\d)/
+        );
+
+
+      const n =
+        match
+          ? match[1]
+          : null;
+
+
+      const nome =
+        RISTORANTI[n] ||
+        m.message;
+
+
+      /*
+        Data e ora
+      */
+
+      const quando =
+        new Date(
+          m.time * 1000
+        ).toLocaleString(
+          'it-IT',
+          {
+            dateStyle:'full',
+            timeStyle:'short'
+          }
+        );
+
+
+      /*
+        Link
+      */
+
+      const prenota =
+        creaLinkPrenotazione(nome);
+
+
+      const maps =
+        creaLinkMaps(nome);
+
+
+      /*
+        OUTPUT FINALE
+      */
+
+      out.innerHTML = `
+
+        <div class="choice-result">
+
+          <div class="choice-label">
+            Scelta effettuata
+          </div>
+
+          <div class="choice-name">
+            ${esc(nome)}
+          </div>
+
+          <div class="choice-time">
+            Proposta ${esc(n || '?')}
+            · ${esc(quando)}
+          </div>
+
+
+          <div class="action-buttons">
+
+            <a
+              class="action-btn btn-book"
+              href="${prenota}"
+              target="_blank"
+              rel="noopener"
+            >
+              📅 Prenota
+            </a>
+
+
+            <a
+              class="action-btn btn-map"
+              href="${maps}"
+              target="_blank"
+              rel="noopener"
+            >
+              📍 Maps
+            </a>
+
+          </div>
+
+
+          <button
+            class="copy-btn"
+            type="button"
+            id="copyRestaurant"
+          >
+            Copia nome ristorante
+          </button>
+
+        </div>
+
+      `;
+
+
+      /*
+        Copia nome
+      */
+
+      document
+        .getElementById('copyRestaurant')
+        .addEventListener(
+          'click',
+          async () => {
+
+            try{
+
+              await navigator.clipboard.writeText(
+                nome
+              );
+
+              document
+                .getElementById('copyRestaurant')
+                .textContent =
+                '✓ Nome copiato';
+
+            }catch{
+
+              document
+                .getElementById('copyRestaurant')
+                .textContent =
+                nome;
+
+            }
+
+          }
+        );
+
+
+    }catch{
+
+      out.innerHTML = `
+
+        <div class="error-box">
+
+          <span class="err">
+            Impossibile leggere la scelta.
+          </span>
+
+          <br>
+
+          <small>
+            Controlla la connessione e riprova.
+          </small>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  document
+    .getElementById('reveal')
+    .addEventListener(
+      'click',
+      rivela
+    );
+
+
+  /*
+    Invio con ENTER
+  */
+
+  pwd.addEventListener(
+    'keydown',
+    e => {
+
+      if(e.key === 'Enter'){
+
+        rivela();
+
+      }
+
+    }
+  );
+
+
+  /*
+    ESC per chiudere
+  */
+
+  document.addEventListener(
+    'keydown',
+    e => {
+
+      if(
+        e.key === 'Escape' &&
+        admin.classList.contains('open')
+      ){
+
+        chiudi();
+
+      }
+
+    }
+  );
+
+
 })();
 </script>
+
 </body>
 </html>
