@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cena a Sorpresa</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #f5f5f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            /* Sfondo stile iOS / macOS */
+            background: linear-gradient(135deg, #101018, #2a2a35, #141727, #1a1a24);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            letter-spacing: 0.5px;
+            font-size: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+
+        /* Effetto Glassmorphism */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu-title {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .menu-items {
+            list-style: none;
+            line-height: 1.8;
+            font-weight: 300;
+            color: #d1d1d6;
+        }
+
+        .menu-items li {
+            margin-bottom: 0.4rem;
+        }
+
+        .menu-items span {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #98989d;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        #success-message {
+            display: none;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-top: 25vh;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Orb stile Siri */
+        .siri-orb {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff8a00, #e52e71, #9c27b0, #03a9f4);
+            filter: blur(10px);
+            animation: breathe 3s infinite alternate ease-in-out;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 20px rgba(229, 46, 113, 0.4);
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.15); opacity: 1; }
+        }
+
+        /* Area d'azione segreta per te */
+        #admin-trigger {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: transparent;
+            cursor: default;
+            z-index: 100;
+        }
+
+        /* Finestra Segreta */
+        #admin-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .admin-content {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+
+        .admin-content input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            outline: none;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            text-align: center;
+            font-size: 1rem;
+        }
+        
+        .admin-content input::placeholder { color: #888; }
+
+        .admin-content button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            background: #fff;
+            color: #000;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .admin-content button:active { transform: scale(0.98); }
+
+        .btn-close {
+            background: transparent !important;
+            color: #fff !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-view">
+        <div class="siri-orb"></div>
+        <h1>Quale menù ti ispira di più?</h1>
+
+        <div class="container" id="menu-container">
+            <!-- Ristorante 1: I Dù dela Contrada -->
+            <div class="card" onclick="selectMenu(1)">
+                <h2 class="menu-title">Proposta 1</h2>
+                <ul class="menu-items">
+                    <li>Antipasto: Salumi tipici selezionati con giardiniera artigianale</li>
+                    <li>Primo: Casoncelli tradizionali burro versato e salvia</li>
+                    <li>Secondo: Manzo all'olio con polenta morbida macinata a pietra</li>
+                    <li>Dolce: Torta tipica bresciana della casa</li>
+                    <span>Atmosfera tipica, sapori di una volta.</span>
+                </ul>
+            </div>
+
+            <!-- Ristorante 2: Massari Gardone -->
+            <div class="card" onclick="selectMenu(2)">
+                <h2 class="menu-title">Proposta 2</h2>
+                <ul class="menu-items">
+                    <li>Antipasto: Crudo di mare e selezione di tartare del giorno</li>
+                    <li>Primo: Risotto d'autore al profumo di lago</li>
+                    <li>Secondo: Trancio di pescato su vellutata di stagione</li>
+                    <li>Dolce: Selezione di alta pasticceria contemporanea</li>
+                    <span>Eleganza, design e materie prime di altissima qualità.</span>
+                </ul>
+            </div>
+
+            <!-- Ristorante 3: Oste Sobrio -->
+            <div class="card" onclick="selectMenu(3)">
+                <h2 class="menu-title">Proposta 3</h2>
+                <ul class="menu-items">
+                    <li>Antipasto: Tagliere di formaggi stagionati e sfiziosità dell'oste</li>
+                    <li>Primo: Bigoli freschi con zucca e croccante di pancetta</li>
+                    <li>Secondo: Filetto di manzo al pepe verde</li>
+                    <li>Dolce: Tiramisù tradizionale</li>
+                    <span>Atmosfera intima in centro storico, accoglienza calorosa.</span>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messaggio di Successo per la fidanzata -->
+    <div id="success-message">
+        <div class="siri-orb"></div>
+        <h2>Ottima scelta!</h2>
+        <p style="margin-top: 15px; color: #98989d; font-weight: 300;">La tua scelta è stata registrata. Non vedo l'ora. ❤️</p>
+    </div>
+
+    <!-- Area Trigger Segreta per te (invisibile in basso a destra) -->
+    <div id="admin-trigger" ondblclick="openAdmin()"></div>
+
+    <!-- Finestra Segreta (Admin) -->
+    <div id="admin-modal">
+        <div class="admin-content">
+            <h3 style="font-weight: 400;">Accesso Riservato</h3>
+            <p style="font-size: 0.85em; margin-top: 5px; color:#aaa;">Inserisci la password per scoprire il ristorante</p>
+            <input type="password" id="admin-pwd" placeholder="Password...">
+            <button onclick="checkAdmin()">Rivela Scelta</button>
+            
+            <p id="admin-result" style="margin-top: 20px; font-weight: 300; font-size: 1.1rem; line-height:1.5;"></p>
+            
+            <button class="btn-close" onclick="closeAdmin()">Chiudi</button>
+        </div>
+    </div>
+
+    <script>
+        // Funzione chiamata quando la tua ragazza clicca una scheda
+        function selectMenu(choice) {
+            // Salva la scelta nel browser (Local Storage)
+            localStorage.setItem('scelta_ristorante', choice);
+            
+            // Dissolvenza incrociata tra le schermate
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+        }
+
+        // --- FUNZIONI SEGRETE PER TE ---
+        const modal = document.getElementById('admin-modal');
+
+        function openAdmin() {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.style.opacity = '1', 10);
+        }
+
+        function closeAdmin() {
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('admin-pwd').value = '';
+                document.getElementById('admin-result').innerText = '';
+            }, 300);
+        }
+
+        function checkAdmin() {
+            const pwd = document.getElementById('admin-pwd').value.toLowerCase().trim();
+            // La tua password è "amore"
+            if (pwd === "amore") {
+                const scelta = localStorage.getItem('scelta_ristorante');
+                const resultText = document.getElementById('admin-result');
+                
+                if (!scelta) {
+                    resultText.innerHTML = "<span style='color:#ff4d4d;'>Nessuna scelta effettuata ancora!</span>";
+                    return;
+                }
+
+                let nomeRistorante = "";
+                if (scelta == 1) nomeRistorante = "I Dù dela Contrada";
+                if (scelta == 2) nomeRistorante = "Massari Gardone Riviera";
+                if (scelta == 3) nomeRistorante = "Osteria Oste Sobrio";
+
+                resultText.innerHTML = `Ha scelto la <b>Proposta ${scelta}</b>.<br><br><span style='color:#03a9f4;'>Ristorante:</span><br><b>${nomeRistorante}</b>`;
+            } else {
+                alert("Password errata!");
+            }
+        }
+    </script>
+</body>
+</html>
