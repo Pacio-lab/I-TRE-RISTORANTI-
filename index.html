@@ -1,334 +1,299 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cena a Sorpresa</title>
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --text-color: #f5f5f7;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101018">
+<title>Cena a Sorpresa</title>
+<style>
+:root{
+  --glass-bg:rgba(255,255,255,.09);
+  --glass-border:rgba(255,255,255,.18);
+  --text:#f5f5f7;
+  --muted:#98989d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#101018}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  min-height:100dvh;
+  padding:2rem 1.25rem;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+/* Sfondo animato: un solo layer che si muove con transform (GPU), niente repaint */
+.bg{
+  position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:linear-gradient(135deg,#101018,#1a1a24 50%,#141727);
+}
+.bg::before{
+  content:"";position:absolute;width:140%;height:140%;top:-20%;left:-20%;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(156,39,176,.28),transparent 45%),
+    radial-gradient(circle at 80% 70%,rgba(3,169,244,.22),transparent 45%);
+  animation:drift 18s ease-in-out infinite alternate;
+  will-change:transform;
+}
+@keyframes drift{
+  from{transform:translate3d(-4%,-3%,0) scale(1)}
+  to{transform:translate3d(4%,3%,0) scale(1.08)}
+}
+main{max-width:800px;margin:0 auto;display:flex;flex-direction:column;align-items:center}
+h1{font-weight:300;text-align:center;letter-spacing:.5px;font-size:clamp(1.5rem,5vw,2rem);margin-bottom:2rem}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+/* Orb: gradiente + glow statico, anima solo transform/opacity */
+.orb{
+  width:70px;height:70px;border-radius:50%;margin:0 auto 1.5rem;
+  background:radial-gradient(circle at 30% 30%,#ff8a00,#e52e71 45%,#9c27b0 70%,#03a9f4);
+  box-shadow:0 0 28px rgba(229,46,113,.45);
+  animation:breathe 3s ease-in-out infinite alternate;
+  will-change:transform,opacity;
+}
+@keyframes breathe{from{transform:scale(.9);opacity:.75}to{transform:scale(1.12);opacity:1}}
 
-        body {
-            /* Sfondo stile iOS / macOS */
-            background: linear-gradient(135deg, #101018, #2a2a35, #141727, #1a1a24);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            padding: 2rem;
-        }
+.cards{width:100%;display:flex;flex-direction:column;gap:1.25rem}
+.card{
+  display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  border-radius:24px;padding:1.75rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  transition:transform .25s ease,background-color .25s ease;
+}
+@media (hover:hover){.card:hover{transform:translateY(-3px);background:rgba(255,255,255,.14)}}
+.card:active{transform:scale(.985)}
+.card:focus-visible{outline:2px solid #03a9f4;outline-offset:3px}
+.card[disabled]{pointer-events:none;opacity:.6}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+.card h2{
+  font-size:1.3rem;font-weight:400;letter-spacing:1px;
+  margin-bottom:1rem;padding-bottom:.8rem;border-bottom:1px solid var(--glass-border);
+}
+.card ul{list-style:none;line-height:1.7;font-weight:300;color:#d1d1d6}
+.card li+li{margin-top:.35rem}
+.card p{margin-top:1rem;font-style:italic;font-size:.9em;color:var(--muted)}
 
-        h1 {
-            font-weight: 300;
-            margin-bottom: 2.5rem;
-            text-align: center;
-            letter-spacing: 0.5px;
-            font-size: 2rem;
-        }
+#success{display:none;text-align:center;margin-top:22vh}
+#success h2{font-size:1.6rem;font-weight:300}
+#success p{margin-top:.9rem;color:var(--muted);font-weight:300}
+body.done #choose{display:none}
+body.done #success{display:block;animation:fade .8s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            z-index: 10;
-        }
+/* Area riservata (solo per te) */
+#trigger{position:fixed;right:0;bottom:0;width:72px;height:72px;z-index:50;background:transparent}
+#admin{
+  position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.88);padding:1.25rem;
+}
+#admin.open{display:flex}
+.panel{
+  width:100%;max-width:400px;text-align:center;padding:2rem;border-radius:20px;
+  background:#1b1b24;border:1px solid var(--glass-border);
+}
+.panel h3{font-weight:400}
+.panel .hint{font-size:.85rem;color:var(--muted);margin-top:.4rem}
+.panel input{
+  width:100%;margin-top:1rem;padding:12px;border-radius:12px;font-size:1rem;text-align:center;
+  border:1px solid var(--glass-border);background:rgba(255,255,255,.08);color:#fff;outline:none;
+}
+.panel button{
+  width:100%;margin-top:.8rem;padding:12px;border-radius:12px;border:0;font-size:1rem;cursor:pointer;
+  background:#fff;color:#000;font-weight:500;
+}
+.panel button.ghost{background:transparent;color:#fff;border:1px solid var(--glass-border)}
+#result{margin-top:1.25rem;line-height:1.6;font-weight:300;font-size:1.05rem;min-height:1.5em}
+#result b{font-weight:600}
+#result a{color:#03a9f4}
+#result .err{color:#ff6b6b}
 
-        /* Effetto Glassmorphism */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .menu-title {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .menu-items {
-            list-style: none;
-            line-height: 1.8;
-            font-weight: 300;
-            color: #d1d1d6;
-        }
-
-        .menu-items li {
-            margin-bottom: 0.4rem;
-        }
-
-        .menu-items span {
-            font-style: italic;
-            font-size: 0.9em;
-            color: #98989d;
-            display: block;
-            margin-top: 1rem;
-        }
-
-        #success-message {
-            display: none;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-top: 25vh;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Orb stile Siri */
-        .siri-orb {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ff8a00, #e52e71, #9c27b0, #03a9f4);
-            filter: blur(10px);
-            animation: breathe 3s infinite alternate ease-in-out;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 0 20px rgba(229, 46, 113, 0.4);
-        }
-
-        @keyframes breathe {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.15); opacity: 1; }
-        }
-
-        /* Area d'azione segreta per te */
-        #admin-trigger {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 80px;
-            height: 80px;
-            background: transparent;
-            cursor: default;
-            z-index: 100;
-        }
-
-        /* Finestra Segreta */
-        #admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .admin-content {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            padding: 2.5rem;
-            border-radius: 20px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-
-        .admin-content input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            outline: none;
-            margin-top: 15px;
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            text-align: center;
-            font-size: 1rem;
-        }
-        
-        .admin-content input::placeholder { color: #888; }
-
-        .admin-content button {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            background: #fff;
-            color: #000;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 1rem;
-            transition: background 0.2s;
-        }
-
-        .admin-content button:active { transform: scale(0.98); }
-
-        .btn-close {
-            background: transparent !important;
-            color: #fff !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
-        }
-    </style>
+@media (prefers-reduced-motion:reduce){
+  .bg::before,.orb{animation:none}
+  .card{transition:none}
+}
+</style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
 
-    <div id="main-view">
-        <div class="siri-orb"></div>
-        <h1>Quale menù ti ispira di più?</h1>
+<main>
+  <section id="choose">
+    <div class="orb" aria-hidden="true"></div>
+    <h1>Quale menù ti ispira di più?</h1>
 
-        <div class="container" id="menu-container">
-            <!-- Ristorante 1: I Dù dela Contrada -->
-            <div class="card" onclick="selectMenu(1)">
-                <h2 class="menu-title">Proposta 1</h2>
-                <ul class="menu-items">
-                    <li>Antipasto: Salumi tipici selezionati con giardiniera artigianale</li>
-                    <li>Primo: Casoncelli tradizionali burro versato e salvia</li>
-                    <li>Secondo: Manzo all'olio con polenta morbida macinata a pietra</li>
-                    <li>Dolce: Torta tipica bresciana della casa</li>
-                    <span>Atmosfera tipica, sapori di una volta.</span>
-                </ul>
-            </div>
+    <div class="cards">
+      <button class="card" type="button" data-choice="1">
+        <h2>Proposta 1</h2>
+        <ul>
+          <li>Antipasto: Salumi tipici selezionati con giardiniera artigianale</li>
+          <li>Primo: Casoncelli tradizionali burro versato e salvia</li>
+          <li>Secondo: Manzo all'olio con polenta morbida macinata a pietra</li>
+          <li>Dolce: Torta tipica bresciana della casa</li>
+        </ul>
+        <p>Atmosfera tipica, sapori di una volta.</p>
+      </button>
 
-            <!-- Ristorante 2: Massari Gardone -->
-            <div class="card" onclick="selectMenu(2)">
-                <h2 class="menu-title">Proposta 2</h2>
-                <ul class="menu-items">
-                    <li>Antipasto: Crudo di mare e selezione di tartare del giorno</li>
-                    <li>Primo: Risotto d'autore al profumo di lago</li>
-                    <li>Secondo: Trancio di pescato su vellutata di stagione</li>
-                    <li>Dolce: Selezione di alta pasticceria contemporanea</li>
-                    <span>Eleganza, design e materie prime di altissima qualità.</span>
-                </ul>
-            </div>
+      <button class="card" type="button" data-choice="2">
+        <h2>Proposta 2</h2>
+        <ul>
+          <li>Antipasto: Crudo di mare e selezione di tartare del giorno</li>
+          <li>Primo: Risotto d'autore al profumo di lago</li>
+          <li>Secondo: Trancio di pescato su vellutata di stagione</li>
+          <li>Dolce: Selezione di alta pasticceria contemporanea</li>
+        </ul>
+        <p>Eleganza, design e materie prime di altissima qualità.</p>
+      </button>
 
-            <!-- Ristorante 3: Oste Sobrio -->
-            <div class="card" onclick="selectMenu(3)">
-                <h2 class="menu-title">Proposta 3</h2>
-                <ul class="menu-items">
-                    <li>Antipasto: Tagliere di formaggi stagionati e sfiziosità dell'oste</li>
-                    <li>Primo: Bigoli freschi con zucca e croccante di pancetta</li>
-                    <li>Secondo: Filetto di manzo al pepe verde</li>
-                    <li>Dolce: Tiramisù tradizionale</li>
-                    <span>Atmosfera intima in centro storico, accoglienza calorosa.</span>
-                </ul>
-            </div>
-        </div>
+      <button class="card" type="button" data-choice="3">
+        <h2>Proposta 3</h2>
+        <ul>
+          <li>Antipasto: Tagliere di formaggi stagionati e sfiziosità dell'oste</li>
+          <li>Primo: Bigoli freschi con zucca e croccante di pancetta</li>
+          <li>Secondo: Filetto di manzo al pepe verde</li>
+          <li>Dolce: Tiramisù tradizionale</li>
+        </ul>
+        <p>Atmosfera intima in centro storico, accoglienza calorosa.</p>
+      </button>
     </div>
+  </section>
 
-    <!-- Messaggio di Successo per la fidanzata -->
-    <div id="success-message">
-        <div class="siri-orb"></div>
-        <h2>Ottima scelta!</h2>
-        <p style="margin-top: 15px; color: #98989d; font-weight: 300;">La tua scelta è stata registrata. Non vedo l'ora. ❤️</p>
-    </div>
+  <section id="success" role="status" aria-live="polite">
+    <div class="orb" aria-hidden="true"></div>
+    <h2>Ottima scelta!</h2>
+    <p>La tua scelta è stata registrata. Non vedo l'ora. ❤️</p>
+  </section>
+</main>
 
-    <!-- Area Trigger Segreta per te (invisibile in basso a destra) -->
-    <div id="admin-trigger" ondblclick="openAdmin()"></div>
+<div id="trigger" aria-hidden="true"></div>
 
-    <!-- Finestra Segreta (Admin) -->
-    <div id="admin-modal">
-        <div class="admin-content">
-            <h3 style="font-weight: 400;">Accesso Riservato</h3>
-            <p style="font-size: 0.85em; margin-top: 5px; color:#aaa;">Inserisci la password per scoprire il ristorante</p>
-            <input type="password" id="admin-pwd" placeholder="Password...">
-            <button onclick="checkAdmin()">Rivela Scelta</button>
-            
-            <p id="admin-result" style="margin-top: 20px; font-weight: 300; font-size: 1.1rem; line-height:1.5;"></p>
-            
-            <button class="btn-close" onclick="closeAdmin()">Chiudi</button>
-        </div>
-    </div>
+<div id="admin" role="dialog" aria-modal="true" aria-label="Area riservata">
+  <div class="panel">
+    <h3>Area riservata</h3>
+    <p class="hint">Inserisci la password per vedere la scelta</p>
+    <input id="pwd" type="password" placeholder="Password" autocomplete="off">
+    <button id="reveal" type="button">Rivela scelta</button>
+    <div id="result"></div>
+    <button id="close" class="ghost" type="button">Chiudi</button>
+  </div>
+</div>
 
-    <script>
-        // Funzione chiamata quando la tua ragazza clicca una scheda
-        function selectMenu(choice) {
-            // Salva la scelta nel browser (Local Storage)
-            localStorage.setItem('scelta_ristorante', choice);
-            
-            // Dissolvenza incrociata tra le schermate
-            document.getElementById('main-view').style.display = 'none';
-            document.getElementById('success-message').style.display = 'block';
-        }
+<script>
+(() => {
+  'use strict';
 
-        // --- FUNZIONI SEGRETE PER TE ---
-        const modal = document.getElementById('admin-modal');
+  // ====== CONFIGURAZIONE (da modificare) ======
+  // 1) Scegli un nome LUNGO e imprevedibile: chiunque lo conosca può leggere i messaggi.
+  // 2) Sul tuo telefono installa l'app "ntfy" (iOS/Android) e iscriviti allo stesso nome,
+  //    oppure apri https://ntfy.sh/IL_TUO_NOME nel browser.
+  const NTFY_TOPIC = 'cena-sorpresa-CAMBIA-QUESTO-7k3xq9';
 
-        function openAdmin() {
-            modal.style.display = 'flex';
-            setTimeout(() => modal.style.opacity = '1', 10);
-        }
+  const RISTORANTI = {
+    1: 'I Dù dela Contrada',
+    2: 'Massari Gardone Riviera',
+    3: 'Osteria Oste Sobrio'
+  };
 
-        function closeAdmin() {
-            modal.style.opacity = '0';
-            setTimeout(() => {
-                modal.style.display = 'none';
-                document.getElementById('admin-pwd').value = '';
-                document.getElementById('admin-result').innerText = '';
-            }, 300);
-        }
+  const KEY_DONE = 'cena_scelta_inviata';
+  const KEY_PENDING = 'cena_scelta_da_inviare';
+  const body = document.body;
 
-        function checkAdmin() {
-            const pwd = document.getElementById('admin-pwd').value.toLowerCase().trim();
-            // La tua password è "amore"
-            if (pwd === "amore") {
-                const scelta = localStorage.getItem('scelta_ristorante');
-                const resultText = document.getElementById('admin-result');
-                
-                if (!scelta) {
-                    resultText.innerHTML = "<span style='color:#ff4d4d;'>Nessuna scelta effettuata ancora!</span>";
-                    return;
-                }
+  const store = {
+    get: k => { try { return localStorage.getItem(k); } catch { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
+    del: k => { try { localStorage.removeItem(k); } catch {} }
+  };
 
-                let nomeRistorante = "";
-                if (scelta == 1) nomeRistorante = "I Dù dela Contrada";
-                if (scelta == 2) nomeRistorante = "Massari Gardone Riviera";
-                if (scelta == 3) nomeRistorante = "Osteria Oste Sobrio";
+  async function invia(scelta) {
+    const res = await fetch('https://ntfy.sh/' + encodeURIComponent(NTFY_TOPIC), {
+      method: 'POST',
+      headers: { 'Title': 'Ha scelto la cena!', 'Priority': '4', 'Tags': 'heart' },
+      body: `Proposta ${scelta}: ${RISTORANTI[scelta]}`,
+      keepalive: true
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+  }
 
-                resultText.innerHTML = `Ha scelto la <b>Proposta ${scelta}</b>.<br><br><span style='color:#03a9f4;'>Ristorante:</span><br><b>${nomeRistorante}</b>`;
-            } else {
-                alert("Password errata!");
-            }
-        }
-    </script>
+  async function tentaInvio(scelta) {
+    try {
+      await invia(scelta);
+      store.del(KEY_PENDING);
+      store.set(KEY_DONE, String(scelta));
+    } catch {
+      // Niente rete: riprova al prossimo caricamento della pagina
+      store.set(KEY_PENDING, String(scelta));
+    }
+  }
+
+  // Un solo listener per tutte le schede
+  document.getElementById('choose').addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const scelta = Number(card.dataset.choice);
+    document.querySelectorAll('.card').forEach(c => c.disabled = true);
+    body.classList.add('done');          // feedback immediato, senza aspettare la rete
+    tentaInvio(scelta);
+  }, { once: true });
+
+  // Se aveva già scelto, mostra direttamente il messaggio finale
+  if (store.get(KEY_DONE)) body.classList.add('done');
+
+  // Se l'invio precedente era fallito, riprova
+  const pending = store.get(KEY_PENDING);
+  if (pending) { body.classList.add('done'); tentaInvio(Number(pending)); }
+
+  // ====== AREA RISERVATA (solo per te) ======
+  // Tocca due volte l'angolo in basso a destra. La password serve solo a evitare
+  // sbirciatine accidentali: non è una vera protezione.
+  const ADMIN_PWD = 'amore';
+  const admin = document.getElementById('admin');
+  const pwd = document.getElementById('pwd');
+  const out = document.getElementById('result');
+  const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  let lastTap = 0;
+  document.getElementById('trigger').addEventListener('click', () => {
+    const now = Date.now();
+    if (now - lastTap < 450) { admin.classList.add('open'); pwd.focus(); }
+    lastTap = now;
+  });
+
+  function chiudi() { admin.classList.remove('open'); pwd.value = ''; out.textContent = ''; }
+  document.getElementById('close').addEventListener('click', chiudi);
+
+  async function rivela() {
+    if (pwd.value.trim().toLowerCase() !== ADMIN_PWD) {
+      out.innerHTML = '<span class="err">Password errata</span>';
+      return;
+    }
+    out.textContent = 'Controllo…';
+    try {
+      // Storico messaggi del topic (ntfy.sh li conserva circa 12 ore)
+      const res = await fetch('https://ntfy.sh/' + encodeURIComponent(NTFY_TOPIC) + '/json?poll=1&since=all');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const righe = (await res.text()).trim().split('\n').filter(Boolean);
+      const msgs = righe.map(r => { try { return JSON.parse(r); } catch { return null; } })
+                        .filter(m => m && m.event === 'message');
+      if (!msgs.length) {
+        out.innerHTML = '<span class="err">Nessuna scelta ricevuta (o più vecchia di 12 ore)</span>';
+        return;
+      }
+      const m = msgs[msgs.length - 1];
+      const n = (m.message.match(/Proposta (\d)/) || [])[1];
+      const nome = RISTORANTI[n] || m.message;
+      const quando = new Date(m.time * 1000).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
+      const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(nome);
+      out.innerHTML = `Ha scelto la <b>Proposta ${esc(n || '?')}</b><br>` +
+        `<b>${esc(nome)}</b><br><small>${esc(quando)}</small><br>` +
+        `<a href="${maps}" target="_blank" rel="noopener">Apri su Maps</a>`;
+    } catch {
+      out.innerHTML = '<span class="err">Impossibile leggere la scelta. Riprova con la connessione attiva.</span>';
+    }
+  }
+  document.getElementById('reveal').addEventListener('click', rivela);
+  pwd.addEventListener('keydown', e => { if (e.key === 'Enter') rivela(); });
+})();
+</script>
 </body>
 </html>
