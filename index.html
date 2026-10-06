@@ -4,30 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <title>Cena a Sorpresa</title>
+  <title>Una Cena a Sorpresa</title>
 
-  <meta name="theme-color" content="#09090d">
+  <meta name="theme-color" content="#08080c">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <style>
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+
+    /* =====================================================
+       VARIABILI
+    ===================================================== */
+
     :root {
       --bg: #08080c;
-      --bg2: #111119;
-      --card: rgba(255,255,255,.065);
-      --border: rgba(255,255,255,.12);
-      --text: #f7f7fa;
-      --muted: #a5a5b2;
-      --accent: #d7b47a;
-      --accent2: #f1d9aa;
-      --green: #79d9a0;
-      --danger: #ff7373;
+      --bg-soft: #111118;
+
+      --glass: rgba(255,255,255,.055);
+      --glass-hover: rgba(255,255,255,.085);
+
+      --border: rgba(255,255,255,.11);
+      --border-soft: rgba(255,255,255,.07);
+
+      --text: #f7f7f8;
+      --muted: #a7a7b3;
+
+      --gold: #d5b078;
+      --gold-light: #f0d6a4;
+
+      --green: #79d6a0;
+      --red: #ff7373;
     }
+
+
+    /* =====================================================
+       BODY
+    ===================================================== */
 
     html {
       scroll-behavior: smooth;
@@ -35,877 +57,1613 @@
 
     body {
       min-height: 100vh;
+
       color: var(--text);
-      background:
-        radial-gradient(circle at 15% 10%, rgba(215,180,122,.13), transparent 28%),
-        radial-gradient(circle at 85% 25%, rgba(118,94,180,.13), transparent 30%),
-        radial-gradient(circle at 50% 90%, rgba(255,255,255,.05), transparent 30%),
-        var(--bg);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
         "SF Pro Display",
         "Segoe UI",
         sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(213,176,120,.14),
+          transparent 28%
+        ),
+
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(120,95,190,.12),
+          transparent 30%
+        ),
+
+        radial-gradient(
+          circle at 50% 90%,
+          rgba(255,255,255,.045),
+          transparent 32%
+        ),
+
+        var(--bg);
+
       overflow-x: hidden;
     }
 
+
     body::before {
       content: "";
+
       position: fixed;
+
       inset: 0;
+
       pointer-events: none;
+
       background:
         linear-gradient(
-          120deg,
+          110deg,
           transparent 0%,
-          rgba(255,255,255,.025) 45%,
-          transparent 50%
+          rgba(255,255,255,.025) 48%,
+          transparent 55%
         );
-      animation: shine 12s linear infinite;
+
+      transform: translateX(-100%);
+
+      animation:
+        backgroundShine 13s linear infinite;
+
       z-index: -1;
     }
 
-    @keyframes shine {
-      from {
+
+    @keyframes backgroundShine {
+
+      0% {
         transform: translateX(-100%);
       }
-      to {
+
+      100% {
         transform: translateX(100%);
       }
+
     }
 
+
+    /* =====================================================
+       CONTAINER
+    ===================================================== */
+
     .container {
-      width: min(1100px, calc(100% - 32px));
+      width: min(
+        1100px,
+        calc(100% - 30px)
+      );
+
       margin: auto;
     }
 
-    /* =========================
+
+    /* =====================================================
        HEADER
-    ========================= */
+    ===================================================== */
 
     header {
+      padding:
+        72px
+        0
+        38px;
+
       text-align: center;
-      padding: 70px 0 35px;
     }
+
 
     .eyebrow {
       display: inline-flex;
+
       align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border: 1px solid var(--border);
+
+      gap: 9px;
+
+      padding:
+        8px
+        14px;
+
+      margin-bottom: 24px;
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 999px;
-      background: rgba(255,255,255,.045);
-      color: var(--accent2);
-      font-size: 12px;
-      letter-spacing: .14em;
+
+      background:
+        rgba(255,255,255,.04);
+
+      color:
+        var(--gold-light);
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      letter-spacing: .17em;
+
       text-transform: uppercase;
-      backdrop-filter: blur(20px);
-      margin-bottom: 22px;
+
+      backdrop-filter:
+        blur(20px);
     }
 
-    .eyebrow span {
+
+    .eyebrow-dot {
       width: 6px;
       height: 6px;
+
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 14px var(--green);
+
+      background:
+        var(--green);
+
+      box-shadow:
+        0 0 15px
+        var(--green);
     }
+
 
     h1 {
-      font-size: clamp(42px, 10vw, 82px);
-      line-height: .95;
-      letter-spacing: -.055em;
+      font-size:
+        clamp(
+          44px,
+          10vw,
+          82px
+        );
+
+      line-height: .93;
+
+      letter-spacing: -.065em;
+
       font-weight: 700;
-      margin-bottom: 22px;
+
+      margin-bottom: 25px;
     }
 
-    .gradient-text {
-      background: linear-gradient(
-        120deg,
-        #fff,
-        #e7d4b1 45%,
-        #a98a5d
-      );
+
+    .gold-text {
+      background:
+        linear-gradient(
+          120deg,
+          #fff,
+          #e8c994 45%,
+          #9e7c4e
+        );
+
       -webkit-background-clip: text;
       background-clip: text;
+
       color: transparent;
     }
 
+
     .subtitle {
       max-width: 650px;
+
       margin: auto;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.7;
+
+      color:
+        var(--muted);
+
+      font-size: 16px;
+
+      line-height: 1.75;
     }
 
-    /* =========================
-       MAIN
-    ========================= */
 
-    main {
-      padding-bottom: 100px;
-    }
+    /* =====================================================
+       INTRO
+    ===================================================== */
 
     .intro {
       text-align: center;
-      margin: 15px 0 35px;
+
+      margin:
+        8px
+        0
+        32px;
     }
+
 
     .intro strong {
       color: white;
     }
 
-    /* =========================
+
+    /* =====================================================
        CARDS
-    ========================= */
+    ===================================================== */
 
     .cards {
+
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
       gap: 18px;
+
     }
 
+
     .card {
+
       position: relative;
-      border: 1px solid var(--border);
+
+      overflow: hidden;
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 28px;
+
       background:
         linear-gradient(
           145deg,
-          rgba(255,255,255,.09),
-          rgba(255,255,255,.035)
+          rgba(255,255,255,.085),
+          rgba(255,255,255,.025)
         );
+
       box-shadow:
-        0 25px 70px rgba(0,0,0,.28),
-        inset 0 1px 0 rgba(255,255,255,.05);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      overflow: hidden;
+        0 25px 70px
+        rgba(0,0,0,.28),
+
+        inset
+        0 1px 0
+        rgba(255,255,255,.04);
+
+      backdrop-filter:
+        blur(24px);
+
+      -webkit-backdrop-filter:
+        blur(24px);
+
       transition:
         transform .35s ease,
         border-color .35s ease,
         box-shadow .35s ease;
     }
 
+
     .card:hover {
-      transform: translateY(-7px);
-      border-color: rgba(215,180,122,.4);
+
+      transform:
+        translateY(-7px);
+
+      border-color:
+        rgba(213,176,120,.38);
+
       box-shadow:
-        0 30px 80px rgba(0,0,0,.4),
-        0 0 40px rgba(215,180,122,.05);
+        0 35px 90px
+        rgba(0,0,0,.4),
+
+        0 0 40px
+        rgba(213,176,120,.04);
     }
 
+
     .card-top {
+
       height: 150px;
+
       padding: 25px;
+
       display: flex;
+
       flex-direction: column;
+
       justify-content: space-between;
+
       background:
         radial-gradient(
           circle at 90% 10%,
-          rgba(215,180,122,.22),
+          rgba(213,176,120,.20),
           transparent 40%
         );
     }
 
+
     .number {
+
       width: 38px;
       height: 38px;
+
       display: grid;
+
       place-items: center;
+
+      border:
+        1px solid
+        rgba(255,255,255,.13);
+
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.06);
-      color: var(--accent2);
-      font-size: 13px;
+
+      background:
+        rgba(255,255,255,.05);
+
+      color:
+        var(--gold-light);
+
+      font-size: 12px;
+
+      font-weight: 700;
     }
 
+
     .category {
-      color: var(--accent);
+
+      color:
+        var(--gold);
+
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .18em;
+
+      font-weight: 800;
+
+      letter-spacing: .17em;
+
       text-transform: uppercase;
     }
 
+
     .card-content {
-      padding: 0 25px 25px;
+
+      padding:
+        0
+        25px
+        25px;
     }
 
-    .card h2 {
+
+    .experience-title {
+
       font-size: 27px;
-      letter-spacing: -.03em;
+
+      letter-spacing: -.035em;
+
       margin-bottom: 8px;
     }
 
-    .location {
-      color: var(--muted);
+
+    .experience-subtitle {
+
+      color:
+        var(--muted);
+
       font-size: 13px;
-      margin-bottom: 22px;
+
+      margin-bottom: 20px;
     }
 
+
+    /* =====================================================
+       MENU
+    ===================================================== */
+
     .menu-section {
-      padding: 15px 0;
-      border-top: 1px solid rgba(255,255,255,.08);
+
+      padding:
+        15px
+        0;
+
+      border-top:
+        1px solid
+        var(--border-soft);
     }
+
 
     .menu-section:first-of-type {
       border-top: 0;
     }
 
+
     .menu-title {
-      color: var(--accent2);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+
       margin-bottom: 8px;
+
+      color:
+        var(--gold-light);
+
+      font-size: 10px;
+
+      font-weight: 800;
+
+      letter-spacing: .16em;
+
+      text-transform: uppercase;
     }
 
+
     .menu-section p {
-      color: #c9c9d1;
-      font-size: 14px;
+
+      color:
+        #c8c8d0;
+
+      font-size: 13.5px;
+
       line-height: 1.65;
     }
 
+
+    /* =====================================================
+       CHOOSE BUTTON
+    ===================================================== */
+
     .choose {
+
       width: 100%;
-      margin-top: 18px;
-      padding: 15px 18px;
+
+      margin-top: 17px;
+
+      padding: 15px;
+
       border: 0;
+
       border-radius: 15px;
-      background: linear-gradient(
-        135deg,
-        #ead0a0,
-        #b89561
-      );
-      color: #17120b;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .08em;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ecd3a5,
+          #b58d58
+        );
+
+      color:
+        #18120a;
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      letter-spacing: .1em;
+
       cursor: pointer;
-      transition: .25s ease;
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease;
     }
+
 
     .choose:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(215,180,122,.2);
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 12px 30px
+        rgba(213,176,120,.2);
     }
+
 
     .choose:active {
-      transform: scale(.98);
+
+      transform:
+        scale(.98);
     }
 
-    /* =========================
+
+    /* =====================================================
        SUCCESS
-    ========================= */
+    ===================================================== */
 
     #success {
+
       display: none;
-      min-height: 65vh;
+
+      min-height: 70vh;
+
       align-items: center;
+
       justify-content: center;
+
       text-align: center;
-      padding: 60px 0;
+
+      padding:
+        50px
+        0;
     }
+
 
     body.done #home {
       display: none;
     }
 
+
     body.done #success {
       display: flex;
     }
 
+
     .success-box {
-      width: min(620px, 100%);
-      padding: 55px 30px;
-      border: 1px solid var(--border);
+
+      width:
+        min(
+          620px,
+          100%
+        );
+
+      padding:
+        55px
+        28px;
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 32px;
-      background: rgba(255,255,255,.055);
-      backdrop-filter: blur(30px);
-      box-shadow: 0 30px 90px rgba(0,0,0,.35);
-      animation: successIn .6s ease both;
+
+      background:
+        rgba(255,255,255,.05);
+
+      backdrop-filter:
+        blur(30px);
+
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.35);
+
+      animation:
+        successIn .55s ease both;
     }
+
 
     @keyframes successIn {
+
       from {
+
         opacity: 0;
-        transform: translateY(25px) scale(.97);
+
+        transform:
+          translateY(25px)
+          scale(.97);
+
       }
+
       to {
+
         opacity: 1;
-        transform: none;
+
+        transform:
+          none;
+
       }
+
     }
+
 
     .check {
+
       width: 76px;
       height: 76px;
-      margin: 0 auto 25px;
-      border-radius: 50%;
+
       display: grid;
+
       place-items: center;
-      border: 1px solid rgba(121,217,160,.35);
-      background: rgba(121,217,160,.09);
-      color: var(--green);
-      font-size: 34px;
-      box-shadow: 0 0 40px rgba(121,217,160,.08);
+
+      margin:
+        0
+        auto
+        25px;
+
+      border:
+        1px solid
+        rgba(121,214,160,.35);
+
+      border-radius: 50%;
+
+      background:
+        rgba(121,214,160,.08);
+
+      color:
+        var(--green);
+
+      font-size: 33px;
+
+      box-shadow:
+        0 0 40px
+        rgba(121,214,160,.08);
     }
 
+
     .success-box h2 {
+
       font-size: 40px;
-      letter-spacing: -.04em;
+
+      letter-spacing: -.045em;
+
       margin-bottom: 15px;
     }
 
+
     .success-box p {
+
       max-width: 450px;
+
       margin: auto;
-      color: var(--muted);
+
+      color:
+        var(--muted);
+
+      font-size: 15px;
+
       line-height: 1.7;
     }
 
-    .home-btn {
+
+    /* =====================================================
+       HOME BUTTON
+    ===================================================== */
+
+    .home-button {
+
       margin-top: 30px;
-      padding: 14px 22px;
+
+      padding:
+        14px
+        22px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.13);
+
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.05);
+
       color: white;
+
+      font-size: 12px;
+
+      font-weight: 800;
+
       cursor: pointer;
-      font-size: 13px;
-      font-weight: 700;
+
       transition: .25s ease;
     }
 
-    .home-btn:hover {
-      background: rgba(255,255,255,.11);
-      transform: translateY(-2px);
+
+    .home-button:hover {
+
+      background:
+        rgba(255,255,255,.1);
+
+      transform:
+        translateY(-2px);
     }
 
-    /* =========================
-       ADMIN
-    ========================= */
+
+    /* =====================================================
+       ADMIN OVERLAY
+    ===================================================== */
 
     #admin {
+
       display: none;
+
       position: fixed;
+
       inset: 0;
+
       z-index: 1000;
-      background: rgba(3,3,7,.82);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+
+      align-items: center;
+
+      justify-content: center;
+
       padding: 20px;
+
       overflow-y: auto;
+
+      background:
+        rgba(3,3,7,.84);
+
+      backdrop-filter:
+        blur(25px);
+
+      -webkit-backdrop-filter:
+        blur(25px);
     }
+
 
     #admin.active {
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
+
     .admin-box {
-      width: min(560px, 100%);
+
+      width:
+        min(
+          560px,
+          100%
+        );
+
       max-height: 90vh;
+
       overflow-y: auto;
+
       padding: 30px;
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 28px;
-      border: 1px solid var(--border);
+
       background:
         linear-gradient(
           145deg,
-          rgba(30,30,39,.96),
-          rgba(13,13,19,.97)
+          rgba(30,30,39,.97),
+          rgba(12,12,18,.98)
         );
-      box-shadow: 0 30px 100px rgba(0,0,0,.6);
+
+      box-shadow:
+        0 35px 100px
+        rgba(0,0,0,.65);
     }
 
+
     .admin-header {
+
       display: flex;
-      justify-content: space-between;
+
       align-items: center;
+
+      justify-content: space-between;
+
       gap: 20px;
+
       margin-bottom: 25px;
     }
 
+
     .admin-header h2 {
+
       font-size: 25px;
+
+      letter-spacing: -.03em;
     }
+
 
     .close-admin {
+
       width: 38px;
       height: 38px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 50%;
-      background: rgba(255,255,255,.05);
+
+      background:
+        rgba(255,255,255,.05);
+
       color: white;
+
+      font-size: 21px;
+
       cursor: pointer;
-      font-size: 20px;
     }
 
+
+    /* =====================================================
+       PASSWORD
+    ===================================================== */
+
     .password-area {
+
       text-align: center;
     }
 
+
     .password-area p {
-      color: var(--muted);
+
+      color:
+        var(--muted);
+
       font-size: 14px;
+
+      line-height: 1.6;
+
       margin-bottom: 20px;
     }
 
+
     .password-input {
+
       width: 100%;
+
       padding: 16px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 14px;
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.05);
+
       color: white;
+
       outline: none;
+
       text-align: center;
+
       font-size: 18px;
+
       letter-spacing: .2em;
     }
 
+
     .password-input:focus {
-      border-color: rgba(215,180,122,.5);
+
+      border-color:
+        rgba(213,176,120,.55);
     }
 
+
     .admin-submit {
+
       width: 100%;
+
       margin-top: 12px;
+
       padding: 15px;
+
       border: 0;
+
       border-radius: 14px;
-      background: linear-gradient(135deg,#ead0a0,#b89561);
-      color: #17120b;
-      font-weight: 800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ecd3a5,
+          #b58d58
+        );
+
+      color:
+        #18120a;
+
+      font-weight: 900;
+
       cursor: pointer;
     }
 
+
     .password-error {
+
       display: none;
-      color: var(--danger);
-      font-size: 13px;
+
       margin-top: 12px;
+
+      color:
+        var(--red);
+
+      font-size: 13px;
     }
+
+
+    /* =====================================================
+       RISULTATO PRIVATO
+    ===================================================== */
 
     .private-result {
       display: none;
     }
 
+
     .private-result.visible {
       display: block;
     }
 
+
     .result-label {
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
+
+      color:
+        var(--muted);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
       letter-spacing: .15em;
-      margin-bottom: 7px;
+
+      text-transform: uppercase;
+
+      margin-bottom: 8px;
     }
 
+
     .restaurant-name {
+
       font-size: 32px;
+
       font-weight: 700;
-      letter-spacing: -.04em;
+
+      letter-spacing: -.045em;
+
       margin-bottom: 25px;
     }
 
+
     .result-info {
+
       padding: 17px;
+
       margin-bottom: 10px;
+
+      border:
+        1px solid
+        var(--border-soft);
+
       border-radius: 15px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.045);
     }
 
+
     .result-info span {
+
       display: block;
-      color: var(--muted);
-      font-size: 11px;
+
+      color:
+        var(--muted);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: .13em;
+
       text-transform: uppercase;
-      letter-spacing: .1em;
+
       margin-bottom: 5px;
     }
 
+
     .result-info strong {
+
       font-size: 15px;
     }
 
+
+    /* =====================================================
+       ADMIN BUTTONS
+    ===================================================== */
+
     .admin-actions {
+
       display: grid;
-      grid-template-columns: 1fr 1fr;
+
+      grid-template-columns:
+        1fr 1fr;
+
       gap: 10px;
+
       margin-top: 20px;
     }
 
+
     .admin-action {
+
       display: flex;
-      justify-content: center;
+
       align-items: center;
-      padding: 15px;
+
+      justify-content: center;
+
+      min-height: 50px;
+
+      padding: 13px;
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 14px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.05);
+
       color: white;
+
       text-decoration: none;
-      font-size: 12px;
-      font-weight: 800;
+
+      font-size: 11px;
+
+      font-weight: 900;
+
       cursor: pointer;
+
+      transition: .2s ease;
     }
 
-    .admin-action.primary {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg,#ead0a0,#b89561);
-      color: #17120b;
-      border: 0;
-    }
 
     .admin-action:hover {
-      transform: translateY(-2px);
+
+      transform:
+        translateY(-2px);
+
+      background:
+        rgba(255,255,255,.09);
     }
 
-    .admin-home {
+
+    .admin-action.primary {
+
+      grid-column:
+        1 / -1;
+
+      border: 0;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ecd3a5,
+          #b58d58
+        );
+
+      color:
+        #18120a;
+    }
+
+
+    .admin-close-button {
+
       width: 100%;
+
       margin-top: 12px;
+
       padding: 13px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid
+        var(--border);
+
       border-radius: 14px;
-      background: transparent;
-      color: var(--muted);
+
+      background:
+        transparent;
+
+      color:
+        var(--muted);
+
       cursor: pointer;
     }
 
-    /* =========================
-       HIDDEN TRIGGER
-    ========================= */
+
+    /* =====================================================
+       TRIGGER INVISIBILE
+    ===================================================== */
 
     #secretTrigger {
+
       position: fixed;
+
       right: 0;
       bottom: 0;
+
       width: 70px;
       height: 70px;
+
       z-index: 999;
-      background: transparent;
+
       border: 0;
+
+      background:
+        transparent;
+
       cursor: default;
     }
 
-    /* =========================
+
+    /* =====================================================
        FOOTER
-    ========================= */
+    ===================================================== */
 
     footer {
+
+      padding:
+        30px
+        20px
+        50px;
+
       text-align: center;
-      padding: 30px 20px 50px;
-      color: #666673;
+
+      color:
+        #62626d;
+
       font-size: 11px;
-      letter-spacing: .04em;
     }
 
-    /* =========================
+
+    /* =====================================================
        MOBILE
-    ========================= */
+    ===================================================== */
 
     @media (max-width: 850px) {
+
       .cards {
+
         grid-template-columns: 1fr;
+
       }
 
       header {
+
         padding-top: 55px;
+
       }
 
-      .card {
-        border-radius: 24px;
-      }
     }
 
+
     @media (max-width: 500px) {
+
       .container {
-        width: min(100% - 22px, 1100px);
+
+        width:
+          calc(100% - 22px);
+
       }
 
       header {
-        padding-bottom: 28px;
+
+        padding-top: 50px;
+
       }
 
       .subtitle {
+
         font-size: 15px;
+
       }
 
       .success-box {
-        padding: 45px 22px;
+
+        padding:
+          45px
+          20px;
+
       }
 
       .success-box h2 {
+
         font-size: 34px;
+
       }
 
       .admin-box {
+
         padding: 23px;
+
         border-radius: 23px;
+
       }
 
       .restaurant-name {
+
         font-size: 27px;
+
       }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
-  <!-- =========================
+
+  <!-- =====================================================
        HOME
-  ========================= -->
+  ===================================================== -->
 
   <section id="home">
 
     <header>
+
       <div class="container">
 
         <div class="eyebrow">
-          <span></span>
+
+          <span class="eyebrow-dot"></span>
+
           Una serata speciale
+
         </div>
 
+
         <h1>
-          Cena<br>
-          <span class="gradient-text">a sorpresa.</span>
+
+          Cena
+
+          <br>
+
+          <span class="gold-text">
+            a sorpresa.
+          </span>
+
         </h1>
 
+
         <p class="subtitle">
-          Ho selezionato tre esperienze diverse.
-          Guarda i menu, lasciati ispirare e scegli quella
-          che ti incuriosisce di più.
+
+          Ho preparato tre esperienze diverse
+          per una serata speciale.
+
+          <br>
+
+          Guarda i menu e scegli quella
+          che ti ispira di più.
+
         </p>
 
       </div>
+
     </header>
+
 
     <main class="container">
 
+
       <div class="intro">
+
         <p class="subtitle">
-          <strong>Scorri i menu e scegli.</strong><br>
-          Puoi cambiare idea in qualsiasi momento.
+
+          <strong>
+            Scegli la tua esperienza.
+          </strong>
+
+          <br>
+
+          Puoi cambiare idea e scegliere
+          nuovamente quando vuoi.
+
         </p>
+
       </div>
+
 
       <div class="cards">
 
-        <!-- =========================
-             RISTORANTE 1
-        ========================= -->
+
+        <!-- =================================================
+             ESPERIENZA 01
+        ================================================= -->
 
         <article class="card">
 
           <div class="card-top">
-            <div class="number">01</div>
-            <div class="category">Tradizione</div>
+
+            <div class="number">
+              01
+            </div>
+
+            <div class="category">
+              Tradizione
+            </div>
+
           </div>
+
 
           <div class="card-content">
 
-            <h2>I Dù dela Contrada</h2>
+            <h2 class="experience-title">
+              Esperienza 01
+            </h2>
 
-            <div class="location">
-              Brescia · Cucina bresciana
+            <div class="experience-subtitle">
+              Sapori bresciani e cucina della tradizione
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Antipasti</div>
+
+              <div class="menu-title">
+                Antipasti
+              </div>
+
               <p>
-                Gnocco fritto e salumi selezionati,
+                Gnocco fritto, salumi selezionati,
                 giardiniera, polenta e formaggi.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Primi</div>
+
+              <div class="menu-title">
+                Primi
+              </div>
+
               <p>
                 Casoncelli alla bresciana,
                 tagliatelle al ragù di cinghiale
                 e proposte stagionali.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Secondi</div>
+
+              <div class="menu-title">
+                Secondi
+              </div>
+
               <p>
-                Manzo all’olio con polenta,
-                specialità della tradizione e
-                piatti del giorno.
+                Manzo all'olio con polenta,
+                specialità della tradizione
+                e piatti del giorno.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Dolci</div>
+
+              <div class="menu-title">
+                Dolci
+              </div>
+
               <p>
                 Dolci della casa e proposte
                 stagionali.
               </p>
+
             </div>
+
 
             <button
               class="choose"
               data-id="1">
+
               SCEGLI QUESTA
+
             </button>
 
           </div>
+
         </article>
 
 
-        <!-- =========================
-             RISTORANTE 2
-        ========================= -->
+        <!-- =================================================
+             ESPERIENZA 02
+        ================================================= -->
 
         <article class="card">
 
           <div class="card-top">
-            <div class="number">02</div>
-            <div class="category">Lago</div>
+
+            <div class="number">
+              02
+            </div>
+
+            <div class="category">
+              Lago
+            </div>
+
           </div>
+
 
           <div class="card-content">
 
-            <h2>Massari</h2>
+            <h2 class="experience-title">
+              Esperienza 02
+            </h2>
 
-            <div class="location">
-              Gardone Riviera · Lago di Garda
+            <div class="experience-subtitle">
+              Eleganza, creatività e atmosfera sul lago
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Aperitivo</div>
+
+              <div class="menu-title">
+                Aperitivo
+              </div>
+
               <p>
                 Piccoli assaggi, specialità salate,
                 lievitati e proposte della casa.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Cucina</div>
+
+              <div class="menu-title">
+                Cucina
+              </div>
+
               <p>
                 Piatti stagionali, interpretazioni
                 contemporanee e specialità
                 selezionate.
               </p>
+
             </div>
 
-            <div class="menu-section">
-              <div class="menu-title">Esperienza</div>
-              <p>
-                Una serata più elegante,
-                tra atmosfera raffinata e
-                il fascino del Lago di Garda.
-              </p>
-            </div>
 
             <div class="menu-section">
-              <div class="menu-title">Pasticceria</div>
+
+              <div class="menu-title">
+                Esperienza
+              </div>
+
               <p>
-                Dolci firmati Massari e
-                piccola pasticceria.
+                Una serata elegante in un'atmosfera
+                raffinata, con il fascino
+                del Lago di Garda.
               </p>
+
             </div>
+
+
+            <div class="menu-section">
+
+              <div class="menu-title">
+                Pasticceria
+              </div>
+
+              <p>
+                Dolci e piccola pasticceria
+                di alta qualità.
+              </p>
+
+            </div>
+
 
             <button
               class="choose"
               data-id="2">
+
               SCEGLI QUESTA
+
             </button>
 
           </div>
+
         </article>
 
 
-        <!-- =========================
-             RISTORANTE 3
-        ========================= -->
+        <!-- =================================================
+             ESPERIENZA 03
+        ================================================= -->
 
         <article class="card">
 
           <div class="card-top">
-            <div class="number">03</div>
-            <div class="category">Osteria</div>
+
+            <div class="number">
+              03
+            </div>
+
+            <div class="category">
+              Osteria
+            </div>
+
           </div>
+
 
           <div class="card-content">
 
-            <h2>Osteria Oste Sobrio</h2>
+            <h2 class="experience-title">
+              Esperienza 03
+            </h2>
 
-            <div class="location">
-              Brescia · Centro storico
+            <div class="experience-subtitle">
+              Cucina italiana, atmosfera conviviale
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Antipasti</div>
+
+              <div class="menu-title">
+                Antipasti
+              </div>
+
               <p>
                 Tagliere misto, crudo e melone,
                 parmigiana, tartare di fassona
                 e guazzetto di moscardini.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Primi</div>
+
+              <div class="menu-title">
+                Primi
+              </div>
+
               <p>
                 Casoncelli, bigoli al ragù di pestöm
-                con ricotta fumé, bigoli zucca e
-                pancetta, calamarata e paccheri.
+                con ricotta fumé, bigoli zucca
+                e pancetta, calamarata e paccheri.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Secondi</div>
+
+              <div class="menu-title">
+                Secondi
+              </div>
+
               <p>
                 Tagliata, roast beef, costine
                 Saint Louis, costata, filetto
                 al pepe verde e salmone.
               </p>
+
             </div>
 
+
             <div class="menu-section">
-              <div class="menu-title">Dolci</div>
+
+              <div class="menu-title">
+                Dolci
+              </div>
+
               <p>
-                Tiramisobrio, cheesecake,
+                Tiramisù, cheesecake,
                 torta al cioccolato e sorbetto.
               </p>
+
             </div>
+
 
             <button
               class="choose"
               data-id="3">
+
               SCEGLI QUESTA
+
             </button>
 
           </div>
+
         </article>
 
       </div>
 
     </main>
 
+
     <footer>
+
       Una scelta alla volta. ❤️
+
     </footer>
 
   </section>
 
 
-  <!-- =========================
-       SUCCESS SCREEN
-  ========================= -->
+
+  <!-- =====================================================
+       SCHERMATA DOPO LA SCELTA
+  ===================================================== -->
 
   <section id="success">
 
@@ -917,18 +1675,35 @@
           ✓
         </div>
 
-        <h2>Scelta registrata.</h2>
+
+        <h2>
+          Scelta registrata.
+        </h2>
+
 
         <p>
-          Perfetto. La tua scelta è stata salvata.
-          Se vuoi, puoi tornare alla home e
-          guardare nuovamente le altre proposte.
+
+          Perfetto.
+
+          <br><br>
+
+          La tua scelta è stata salvata.
+
+          <br>
+
+          Se vuoi cambiare idea,
+          puoi tornare alla home
+          e scegliere un'altra esperienza.
+
         </p>
 
+
         <button
-          class="home-btn"
+          class="home-button"
           id="homeButton">
+
           ← Torna alla home
+
         </button>
 
       </div>
@@ -938,123 +1713,178 @@
   </section>
 
 
-  <!-- =========================
-       ADMIN AREA
-  ========================= -->
+
+  <!-- =====================================================
+       AREA PRIVATA
+  ===================================================== -->
 
   <div id="admin">
 
     <div class="admin-box">
 
+
       <div class="admin-header">
 
-        <h2>Area privata</h2>
+        <h2>
+          Area privata
+        </h2>
+
 
         <button
           class="close-admin"
           id="closeAdmin">
+
           ×
+
         </button>
 
       </div>
 
 
-      <!-- PASSWORD -->
+      <!-- =================================================
+           PASSWORD
+      ================================================= -->
 
       <div
         class="password-area"
         id="passwordArea">
 
         <p>
-          Inserisci la password per visualizzare
-          la scelta effettuata.
+
+          Questa area è riservata.
+
+          <br>
+
+          Inserisci la password
+          per vedere la scelta effettuata.
+
         </p>
+
 
         <input
           type="password"
           id="passwordInput"
           class="password-input"
           placeholder="••••••"
-          autocomplete="off">
+          autocomplete="off"
+        >
+
 
         <button
           class="admin-submit"
           id="passwordSubmit">
+
           ACCEDI
+
         </button>
+
 
         <div
           class="password-error"
           id="passwordError">
+
           Password non corretta.
+
         </div>
 
       </div>
 
 
-      <!-- RISULTATO PRIVATO -->
+
+      <!-- =================================================
+           RISULTATO PRIVATO
+      ================================================= -->
 
       <div
         class="private-result"
         id="privateResult">
 
+
         <div class="result-label">
           Ultima scelta effettuata
         </div>
 
+
         <div
           class="restaurant-name"
           id="restaurantName">
+
         </div>
+
 
         <div class="result-info">
 
-          <span>Data</span>
+          <span>
+            Data
+          </span>
 
-          <strong id="selectionDate">
+          <strong
+            id="selectionDate">
+
           </strong>
 
         </div>
 
+
         <div class="result-info">
 
-          <span>Ora</span>
+          <span>
+            Ora
+          </span>
 
-          <strong id="selectionTime">
+          <strong
+            id="selectionTime">
+
           </strong>
 
         </div>
+
 
         <div class="admin-actions">
 
-          <a
-            href="#"
-            target="_blank"
-            class="admin-action primary"
-            id="bookingButton">
-            PRENOTA
-          </a>
 
           <a
             href="#"
             target="_blank"
+            rel="noopener noreferrer"
+            class="admin-action primary"
+            id="bookingButton">
+
+            PRENOTA
+
+          </a>
+
+
+          <a
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
             class="admin-action"
             id="mapsButton">
+
             📍 MAPS
+
           </a>
+
 
           <button
             class="admin-action"
             id="copyButton">
+
             COPIA NOME
+
           </button>
+
 
         </div>
 
+
         <button
-          class="admin-home"
+          class="admin-close-button"
           id="adminHome">
+
           Chiudi area privata
+
         </button>
 
       </div>
@@ -1064,11 +1894,16 @@
   </div>
 
 
-  <!-- TRIGGER INVISIBILE -->
+
+  <!-- =====================================================
+       TRIGGER SEGRETO
+  ===================================================== -->
+
   <button
     id="secretTrigger"
     aria-label="Area privata">
   </button>
+
 
 
   <script>
@@ -1079,46 +1914,60 @@
 
     const PASSWORD = "amore";
 
-    /*
-      SOSTITUISCI QUESTO TOPIC CON UNO TUO,
-      MOLTO LUNGO E DIFFICILE DA INDOVINARE.
-    */
-
     const NTFY_TOPIC =
       "cena-sorpresa-CAMBIA-QUESTO-7k3xq9";
 
 
     /* =====================================================
-       DATI RISTORANTI
+       RISTORANTI
+       
+       ATTENZIONE:
+       I NOMI SONO QUI E NON NELLA PARTE VISIBILE DELLA PAGINA.
+       
+       VENGONO MOSTRATI SOLO NELL'AREA PRIVATA.
     ===================================================== */
 
     const restaurants = {
 
       1: {
-        name: "I Dù dela Contrada",
-        city: "Brescia",
+
+        name:
+          "I Dù dela Contrada",
+
         maps:
           "https://www.google.com/maps/search/?api=1&query=I%20D%C3%B9%20dela%20Contrada%20Brescia",
+
         booking:
           "https://www.google.com/search?q=I+D%C3%B9+dela+Contrada+Brescia+prenotazione"
+
       },
+
 
       2: {
-        name: "Massari Gardone Riviera",
-        city: "Gardone Riviera",
+
+        name:
+          "Massari Gardone Riviera",
+
         maps:
           "https://www.google.com/maps/search/?api=1&query=Massari+Gardone+Riviera",
+
         booking:
           "https://www.google.com/search?q=Massari+Gardone+Riviera+prenotazione"
+
       },
 
+
       3: {
-        name: "Osteria Oste Sobrio",
-        city: "Brescia",
+
+        name:
+          "Osteria Oste Sobrio",
+
         maps:
           "https://www.google.com/maps/search/?api=1&query=Osteria+Oste+Sobrio+Brescia",
+
         booking:
           "https://www.google.com/search?q=Osteria+Oste+Sobrio+Brescia+prenotazione"
+
       }
 
     };
@@ -1128,46 +1977,116 @@
        ELEMENTI
     ===================================================== */
 
-    const body =
-      document.body;
-
     const homeButton =
-      document.getElementById("homeButton");
+      document.getElementById(
+        "homeButton"
+      );
+
+
+    const chooseButtons =
+      document.querySelectorAll(
+        ".choose"
+      );
+
 
     const admin =
-      document.getElementById("admin");
+      document.getElementById(
+        "admin"
+      );
+
 
     const secretTrigger =
-      document.getElementById("secretTrigger");
+      document.getElementById(
+        "secretTrigger"
+      );
+
 
     const closeAdmin =
-      document.getElementById("closeAdmin");
+      document.getElementById(
+        "closeAdmin"
+      );
+
 
     const adminHome =
-      document.getElementById("adminHome");
+      document.getElementById(
+        "adminHome"
+      );
+
 
     const passwordInput =
-      document.getElementById("passwordInput");
+      document.getElementById(
+        "passwordInput"
+      );
+
 
     const passwordSubmit =
-      document.getElementById("passwordSubmit");
+      document.getElementById(
+        "passwordSubmit"
+      );
+
 
     const passwordError =
-      document.getElementById("passwordError");
+      document.getElementById(
+        "passwordError"
+      );
+
 
     const passwordArea =
-      document.getElementById("passwordArea");
+      document.getElementById(
+        "passwordArea"
+      );
+
 
     const privateResult =
-      document.getElementById("privateResult");
+      document.getElementById(
+        "privateResult"
+      );
+
+
+    const restaurantName =
+      document.getElementById(
+        "restaurantName"
+      );
+
+
+    const selectionDate =
+      document.getElementById(
+        "selectionDate"
+      );
+
+
+    const selectionTime =
+      document.getElementById(
+        "selectionTime"
+      );
+
+
+    const bookingButton =
+      document.getElementById(
+        "bookingButton"
+      );
+
+
+    const mapsButton =
+      document.getElementById(
+        "mapsButton"
+      );
+
+
+    const copyButton =
+      document.getElementById(
+        "copyButton"
+      );
 
 
     /* =====================================================
-       SCELTA ATTUALE
+       STATO
     ===================================================== */
 
     let selectedRestaurant =
-      localStorage.getItem("selectedRestaurant") || null;
+      localStorage.getItem(
+        "selectedRestaurant"
+      ) || null;
 
 
     /* =====================================================
@@ -1188,6 +2107,10 @@
     }
 
 
+    /* =====================================================
+       FORMAT ORA
+    ===================================================== */
+
     function formatTime(date) {
 
       return new Intl.DateTimeFormat(
@@ -1202,13 +2125,43 @@
 
 
     /* =====================================================
-       NOTIFICA NTFY
+       SALVA SCELTA
+    ===================================================== */
+
+    function saveChoice(id) {
+
+      selectedRestaurant =
+        String(id);
+
+
+      localStorage.setItem(
+        "selectedRestaurant",
+        selectedRestaurant
+      );
+
+
+      const now =
+        new Date();
+
+
+      localStorage.setItem(
+        "selectionDate",
+        now.toISOString()
+      );
+
+
+      sendNotification(
+        selectedRestaurant
+      );
+
+    }
+
+
+    /* =====================================================
+       NOTIFICA
     ===================================================== */
 
     async function sendNotification(id) {
-
-      const restaurant =
-        restaurants[id];
 
       try {
 
@@ -1216,11 +2169,18 @@
           `https://ntfy.sh/${NTFY_TOPIC}`,
           {
             method: "POST",
+
             headers: {
-              "Title": "Nuova scelta cena",
-              "Priority": "high",
-              "Tags": "fork_and_knife"
+              "Title":
+                "Nuova scelta per la cena",
+
+              "Priority":
+                "high",
+
+              "Tags":
+                "fork_and_knife"
             },
+
             body:
               "È stata effettuata una nuova scelta."
           }
@@ -1228,8 +2188,8 @@
 
       } catch (error) {
 
-        console.log(
-          "Notifica non inviata:",
+        console.warn(
+          "Notifica non disponibile:",
           error
         );
 
@@ -1239,39 +2199,11 @@
 
 
     /* =====================================================
-       SALVA SCELTA
+       CLICK SU SCELTA
     ===================================================== */
 
-    function saveChoice(id) {
-
-      selectedRestaurant =
-        String(id);
-
-      localStorage.setItem(
-        "selectedRestaurant",
-        selectedRestaurant
-      );
-
-      const now =
-        new Date();
-
-      localStorage.setItem(
-        "selectionDate",
-        now.toISOString()
-      );
-
-      sendNotification(id);
-
-    }
-
-
-    /* =====================================================
-       BOTTONI SCELTA
-    ===================================================== */
-
-    document
-      .querySelectorAll(".choose")
-      .forEach(button => {
+    chooseButtons.forEach(
+      button => {
 
         button.addEventListener(
           "click",
@@ -1280,15 +2212,26 @@
             const id =
               button.dataset.id;
 
-            /*
-              IMPORTANTISSIMO:
-              ogni nuova scelta sovrascrive
-              completamente la precedente.
-            */
+
+            if (!restaurants[id]) {
+
+              return;
+
+            }
+
 
             saveChoice(id);
 
-            body.classList.add("done");
+
+            /*
+               Mostra soltanto la conferma.
+               Il nome del ristorante NON viene mostrato.
+            */
+
+            document.body.classList.add(
+              "done"
+            );
+
 
             window.scrollTo({
               top: 0,
@@ -1298,26 +2241,25 @@
           }
         );
 
-      });
+      }
+    );
 
 
     /* =====================================================
        TORNA ALLA HOME
-       E PUOI SCEGLIERE ANCORA
+       
+       LA SCELTA RESTA SALVATA.
+       L'UTENTE PUÒ SCEGLIERE ANCORA.
     ===================================================== */
 
     homeButton.addEventListener(
       "click",
       () => {
 
-        body.classList.remove("done");
+        document.body.classList.remove(
+          "done"
+        );
 
-        /*
-          NON cancelliamo selectedRestaurant.
-
-          La scelta rimane memorizzata,
-          ma l'utente può effettuare una nuova scelta.
-        */
 
         window.scrollTo({
           top: 0,
@@ -1329,11 +2271,11 @@
 
 
     /* =====================================================
-       APERTURA AREA PRIVATA
-       DOPPIO TAP / DOPPIO CLICK
+       DOPPIO TAP AREA PRIVATA
     ===================================================== */
 
     let lastTap = 0;
+
 
     secretTrigger.addEventListener(
       "click",
@@ -1342,14 +2284,15 @@
         const now =
           Date.now();
 
+
         if (
-          now - lastTap <
-          450
+          now - lastTap < 450
         ) {
 
           openAdmin();
 
         }
+
 
         lastTap = now;
 
@@ -1357,24 +2300,40 @@
     );
 
 
+    /* =====================================================
+       APRI ADMIN
+    ===================================================== */
+
     function openAdmin() {
 
-      admin.classList.add("active");
+      admin.classList.add(
+        "active"
+      );
 
-      passwordInput.value = "";
+
+      passwordInput.value =
+        "";
+
 
       passwordError.style.display =
         "none";
 
+
       passwordArea.style.display =
         "block";
+
 
       privateResult.classList.remove(
         "visible"
       );
 
+
       setTimeout(
-        () => passwordInput.focus(),
+        () => {
+
+          passwordInput.focus();
+
+        },
         150
       );
 
@@ -1393,10 +2352,12 @@
 
     }
 
+
     closeAdmin.addEventListener(
       "click",
       closeAdminPanel
     );
+
 
     adminHome.addEventListener(
       "click",
@@ -1405,7 +2366,7 @@
 
 
     /* =====================================================
-       PASSWORD
+       CONTROLLO PASSWORD
     ===================================================== */
 
     function checkPassword() {
@@ -1418,15 +2379,20 @@
         passwordError.style.display =
           "none";
 
+
         passwordArea.style.display =
           "none";
 
+
         showPrivateResult();
 
-      } else {
+      }
+
+      else {
 
         passwordError.style.display =
           "block";
+
 
         passwordInput.select();
 
@@ -1434,11 +2400,16 @@
 
     }
 
+
     passwordSubmit.addEventListener(
       "click",
       checkPassword
     );
 
+
+    /* =====================================================
+       ENTER PASSWORD
+    ===================================================== */
 
     passwordInput.addEventListener(
       "keydown",
@@ -1447,6 +2418,8 @@
         if (
           event.key === "Enter"
         ) {
+
+          event.preventDefault();
 
           checkPassword();
 
@@ -1457,27 +2430,39 @@
 
 
     /* =====================================================
-       MOSTRA RISULTATO PRIVATO
+       RISULTATO PRIVATO
     ===================================================== */
 
     function showPrivateResult() {
 
-      if (!selectedRestaurant) {
+      /*
+         Nessuna scelta.
+      */
 
-        document.getElementById(
-          "restaurantName"
-        ).textContent =
+      if (
+        !selectedRestaurant ||
+        !restaurants[selectedRestaurant]
+      ) {
+
+        restaurantName.textContent =
           "Nessuna scelta ancora";
 
-        document.getElementById(
-          "selectionDate"
-        ).textContent =
+
+        selectionDate.textContent =
           "—";
 
-        document.getElementById(
-          "selectionTime"
-        ).textContent =
+
+        selectionTime.textContent =
           "—";
+
+
+        bookingButton.href =
+          "#";
+
+
+        mapsButton.href =
+          "#";
+
 
         privateResult.classList.add(
           "visible"
@@ -1489,46 +2474,44 @@
 
 
       const restaurant =
-        restaurants[selectedRestaurant];
+        restaurants[
+          selectedRestaurant
+        ];
 
-      const savedDate =
+
+      const storedDate =
         localStorage.getItem(
           "selectionDate"
         );
 
+
       const date =
-        savedDate
-          ? new Date(savedDate)
+        storedDate
+          ? new Date(storedDate)
           : new Date();
 
 
-      document.getElementById(
-        "restaurantName"
-      ).textContent =
+      /*
+         SOLO QUI viene mostrato il nome.
+      */
+
+      restaurantName.textContent =
         restaurant.name;
 
 
-      document.getElementById(
-        "selectionDate"
-      ).textContent =
+      selectionDate.textContent =
         formatDate(date);
 
 
-      document.getElementById(
-        "selectionTime"
-      ).textContent =
+      selectionTime.textContent =
         formatTime(date);
 
 
-      document.getElementById(
-        "mapsButton"
-      ).href =
+      mapsButton.href =
         restaurant.maps;
 
 
-      document.getElementById(
-        "bookingButton"
-      ).href =
+      bookingButton.href =
         restaurant.booking;
 
 
@@ -1540,64 +2523,128 @@
 
 
     /* =====================================================
-       COPIA NOME RISTORANTE
+       COPIA NOME
     ===================================================== */
 
-    document
-      .getElementById("copyButton")
-      .addEventListener(
-        "click",
-        async () => {
+    copyButton.addEventListener(
+      "click",
+      async () => {
 
-          if (!selectedRestaurant) {
-            return;
-          }
+        if (
+          !selectedRestaurant ||
+          !restaurants[selectedRestaurant]
+        ) {
 
-          const name =
-            restaurants[
-              selectedRestaurant
-            ].name;
+          return;
+
+        }
+
+
+        const name =
+          restaurants[
+            selectedRestaurant
+          ].name;
+
+
+        try {
+
+          await navigator.clipboard.writeText(
+            name
+          );
+
+
+          copyButton.textContent =
+            "✓ COPIATO";
+
+
+          setTimeout(
+            () => {
+
+              copyButton.textContent =
+                "COPIA NOME";
+
+            },
+            1500
+          );
+
+        }
+
+        catch (error) {
+
+          /*
+             Fallback.
+          */
+
+          const textarea =
+            document.createElement(
+              "textarea"
+            );
+
+
+          textarea.value =
+            name;
+
+
+          textarea.style.position =
+            "fixed";
+
+
+          textarea.style.opacity =
+            "0";
+
+
+          document.body.appendChild(
+            textarea
+          );
+
+
+          textarea.select();
+
 
           try {
 
-            await navigator.clipboard.writeText(
-              name
+            document.execCommand(
+              "copy"
             );
 
-            const button =
-              document.getElementById(
-                "copyButton"
-              );
-
-            const original =
-              button.textContent;
-
-            button.textContent =
+            copyButton.textContent =
               "✓ COPIATO";
+
 
             setTimeout(
               () => {
-                button.textContent =
-                  original;
+
+                copyButton.textContent =
+                  "COPIA NOME";
+
               },
               1500
             );
 
-          } catch (error) {
+          }
 
-            console.log(
-              "Impossibile copiare:",
-              error
+          catch (fallbackError) {
+
+            console.warn(
+              "Copia non riuscita.",
+              fallbackError
             );
 
           }
 
+
+          document.body.removeChild(
+            textarea
+          );
+
         }
-      );
+
+      }
+    );
 
 
     /* =====================================================
-       ESC PER CHIUDERE AREA PRIVATA
+       ESC PER CHIUDERE
     ===================================================== */
 
     document.addEventListener(
@@ -1606,7 +2653,9 @@
 
         if (
           event.key === "Escape" &&
-          admin.classList.contains("active")
+          admin.classList.contains(
+            "active"
+          )
         ) {
 
           closeAdminPanel();
@@ -1618,7 +2667,7 @@
 
 
     /* =====================================================
-       CLICK FUORI DAL BOX ADMIN
+       CLICK SULLO SFONDO ADMIN
     ===================================================== */
 
     admin.addEventListener(
@@ -1634,6 +2683,43 @@
         }
 
       }
+    );
+
+
+    /* =====================================================
+       AVVIO
+    ===================================================== */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+
+        const savedChoice =
+          localStorage.getItem(
+            "selectedRestaurant"
+          );
+
+
+        if (
+          savedChoice &&
+          restaurants[savedChoice]
+        ) {
+
+          selectedRestaurant =
+            savedChoice;
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       DEBUG
+    ===================================================== */
+
+    console.log(
+      "Cena a sorpresa inizializzata."
     );
 
   </script>
